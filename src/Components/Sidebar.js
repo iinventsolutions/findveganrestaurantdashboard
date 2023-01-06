@@ -18,21 +18,21 @@ const Sidebar = () => {
 
       <MenuWrapper>
         <Link to="/">
-          <MenuItem>
+          <MenuItem tabIndex={1}>
               <AppsIcon style={{color: '#fff'}} />
               <p>Dashboard</p>
           </MenuItem>
         </Link>
         
         <Link to='/menu'>
-          <MenuItem>
+          <MenuItem tabIndex={2}>
             <DescriptionIcon style={{color: '#fff'}} />
             <p>Menu</p>
           </MenuItem>
         </Link>
 
         <Link to='/order-list'>
-          <MenuItem>
+          <MenuItem tabIndex={3}>
             <AppsIcon style={{color: '#fff'}} />
             <p>Order List</p>
           </MenuItem>
@@ -43,14 +43,14 @@ const Sidebar = () => {
           <p>Order detail</p>
         </MenuItem> */}
         <Link to='/reviews'>
-          <MenuItem>
+          <MenuItem tabIndex={4}>
             <RateReviewIcon style={{color: '#fff'}} />
             <p>Reviews</p>
           </MenuItem>
         </Link>
 
         <Link to='/reports'>
-          <MenuItem>
+          <MenuItem tabIndex={5}>
             <AssessmentIcon style={{color: '#fff'}} />
             <p>Reports</p>
           </MenuItem>
@@ -64,7 +64,7 @@ const Sidebar = () => {
         </Link> */}
 
         <Link to='/settings'>
-          <MenuItem>
+          <MenuItem tabIndex={6}>
             <SettingsIcon style={{color: '#fff'}} />
             <p>Settings</p>
           </MenuItem>
@@ -96,7 +96,7 @@ const MenuWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 400px;
-  width: 80%;
+  width: 85%;
   /* border: 1px solid red; */
   margin-top: 20px;
 
@@ -122,10 +122,28 @@ const MenuItem = styled.div`
   /* opacity: 0.8; */
   /* border: 1px solid red; */
 
+  /* &.selected { background-color: red; } */
+
   >p {
     margin-left: 20px;
     font-weight: 400;
     font-family: "Roboto", sans-serif;
     color: #fff;
   }
+
+  &:focus{
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px 15px;
+
+    > p{
+      color:  #000;
+      font-weight: bold;
+    }
+    .MuiSvgIcon-root{
+      color: #000 !important;
+    }
+  }
+
+  
 `

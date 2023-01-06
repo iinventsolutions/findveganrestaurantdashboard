@@ -58,3 +58,42 @@ code {
   color: #fff;
   font-weight: bold;
 }
+
+.MenuTab {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+  /* opacity: 0.8; */
+  /* border: 1px solid red; */
+
+}
+
+.MenuTab p{
+  margin-left: 20px;
+  font-weight: 400;
+  font-family: "Roboto", sans-serif;
+  color: #fff;
+}
+
+.MenuTab:focus{
+  background-color: #fff;
+  border-radius: 8px;
+  /* color: #0000; */
+  
+}
+
+.MenuTab:focus- p{
+  /* background-color: #fff;
+  border-radius: 8px; */
+  color: #0000;
+  
+}
+
+
+
+
+/* .MenuTab:focus p{
+  color: #0000;
+} */
