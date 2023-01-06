@@ -43,11 +43,11 @@ const ComponentWrapper = styled.div`
         font-weight: bold;
     }
 `
-const HeaderSearch = styled.div`
+export const HeaderSearch = styled.div`
     display: flex;
     opacity: 1;
     border-radius: 30px;
-    background-color: #E7E7E7;
+    background-color: #F3F3F3;
     text-align: left;
     padding: 5px 15px;
     color: gray;
@@ -58,7 +58,7 @@ const HeaderSearch = styled.div`
     >input {
         background-color: transparent;
         outline: none;
-        color: gray;
+        color: #797D8C;
         text-align: left;
         border: none;
         min-width: 20vw;

@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Andika&display=swap');
+
 *{
   box-sizing: border-box;
   padding: 0;
@@ -18,4 +20,41 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.searchStyle{
+  width: 100px;
+}
+
+.icStyle{
+  transform: rotateY(180deg);
+}
+
+.status {
+  display: flex;
+  height: 40px;
+  padding: 15px 20px;
+  border-radius: 20px;
+  background-color: #CDE6CF;
+  justify-content: center;
+  align-items: center;
+}
+
+.status p {
+  color: #3B8E40;
+}
+
+.cash {
+  display: flex;
+  height: 30px;
+  padding: 5px 15px;
+  border-radius: 15px;
+  background-color: #2EA74D;
+  justify-content: center;
+  align-items: center;
+}
+
+.cash p{
+  color: #fff;
+  font-weight: bold;
 }

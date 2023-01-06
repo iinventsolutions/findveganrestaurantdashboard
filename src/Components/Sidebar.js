@@ -5,6 +5,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SettingsIcon from '@mui/icons-material/Settings';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import { Link } from "react-router-dom";
 
 
@@ -55,12 +56,22 @@ const Sidebar = () => {
           </MenuItem>
         </Link>
 
+        {/* <Link to='/reports'>
+          <MenuItem>
+            <ReceiptLongOutlinedIcon style={{color: '#fff'}} />
+            <p>Invoice</p>
+          </MenuItem>
+        </Link> */}
+
         <Link to='/settings'>
           <MenuItem>
             <SettingsIcon style={{color: '#fff'}} />
             <p>Settings</p>
           </MenuItem>
         </Link>
+
+        <img src='/images/upgrade.png' />
+
       </MenuWrapper>
     </ComponentWrapper>
   )
@@ -89,20 +100,26 @@ const MenuWrapper = styled.div`
   /* border: 1px solid red; */
   margin-top: 20px;
 
-  >a:nth-last-child(1){
+  >img:nth-last-child(1){
     margin-top: 80px;
   }
 
   > a {
     text-decoration: none;
   }
+
+  > img {
+    width: 80%;
+    height: 180px;
+  }
 `
 const MenuItem = styled.div`
   display: flex;
   height: 30px;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   cursor: pointer;
+  /* opacity: 0.8; */
   /* border: 1px solid red; */
 
   >p {

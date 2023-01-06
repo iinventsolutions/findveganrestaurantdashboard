@@ -2,12 +2,12 @@ import React, {Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import Dashboard from './Components/Dashboard';
 import Spinner from './Components/Spinner';
-const Dashboard = lazy(() => import('./Components/Dashboard'));
-const Menu = lazy(() => import('./Components/Menu'));
-const OrderList = lazy(() => import('./Components/OrderList'));
-const Reports = lazy(() => import('./Components/Reports'));
+const Dashboard = lazy(() => import('./Pages/Dashboard'));
+const Menu = lazy(() => import('./Pages/Menu'));
+const OrderList = lazy(() => import('./Pages/OrderList'));
+const Reports = lazy(() => import('./Pages/Reports'));
 // const Review = lazy(() => import('./Components/Review'));
-const Settings = lazy(() => import('./Components/Settings'));
+const Settings = lazy(() => import('./Pages/Settings'));
 
 const AppRoutes = () => {
   return (
