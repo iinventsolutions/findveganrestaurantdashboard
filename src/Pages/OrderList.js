@@ -262,4 +262,5 @@ const OrderListBody = styled.div`
     /* border: 1px solid #E2E2E2; */
     contain: content;
     overflow: auto;
+    margin-top: 10px;
 `
