@@ -55,7 +55,7 @@ const ComponentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  
+  width: 100%;
 `
 
 const Header = styled.div`

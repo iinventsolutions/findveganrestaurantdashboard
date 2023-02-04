@@ -39,7 +39,7 @@ const ComponentWrapper = styled.div`
 
     >h4{
         font-size: 30px;
-        font-family: "Roboto", sans-serif;
+        font-family: 'Nunito Sans', sans-serif;
         font-weight: bold;
     }
 `

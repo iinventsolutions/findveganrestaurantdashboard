@@ -12,6 +12,7 @@ import OrderState from '../Components/OrderStateItem';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import ForwardIcon from '@mui/icons-material/Forward';
 import OrderListItem from '../Components/OrderListItem';
+import { Grid } from '@material-ui/core';
 
 
 const OrderList = () => {
@@ -19,6 +20,7 @@ const OrderList = () => {
 
   return (
     <ComponentWrapper>
+      {/* <Grid container> */}
       <Header>
         <LineOne>
           <p>Orders</p>
@@ -37,6 +39,7 @@ const OrderList = () => {
             </CustBottom>
           </HeaderButtons>
         </LineOne>
+
         <Divider style={{ color: 'black', width: '98%' }}/>
         <LineTwo>
           <HeaderSearch>
@@ -97,6 +100,7 @@ const OrderList = () => {
             {/* <OrderListItem /> */}
         </OrderListBody>
       </OrderListWrapper>
+      {/* </Grid> */}
     </ComponentWrapper>
   )
 }
@@ -106,7 +110,7 @@ export default OrderList
 const ComponentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-
+  width: 100%;
 `
 const Header = styled.div`
   display: flex;

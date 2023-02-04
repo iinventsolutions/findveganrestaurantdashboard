@@ -5,11 +5,12 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import { Link } from "react-router-dom";
 
 
-const Sidebar = () => {
+const Sidebar = ({signOut}) => {
   return (
     <ComponentWrapper>
       <Logo>
@@ -72,6 +73,13 @@ const Sidebar = () => {
 
         <img src='/images/upgrade.png' />
 
+        
+          <MenuItem tabIndex={6}>
+            <LogoutIcon style={{color: '#fff'}} />
+            <p onClick={signOut}>Sign Out</p>
+          </MenuItem>
+        
+
       </MenuWrapper>
     </ComponentWrapper>
   )
@@ -100,8 +108,9 @@ const MenuWrapper = styled.div`
   /* border: 1px solid red; */
   margin-top: 20px;
 
-  >img:nth-last-child(1){
-    margin-top: 80px;
+  >img:nth-last-child(2){
+    margin-top: 70px;
+    margin-bottom: 20px;
   }
 
   > a {
