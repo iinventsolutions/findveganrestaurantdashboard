@@ -88,7 +88,7 @@ const ComponentWrapper = styled.div`
 
     @media only screen and (max-width: 600px) {
       flex-direction: column;
-      justify-content: center;
+      justify-content: center; 
     }
 
 `
