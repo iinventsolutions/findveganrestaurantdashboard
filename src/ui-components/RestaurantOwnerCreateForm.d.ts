@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -13,21 +13,33 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type RestaurantOwnerCreateFormInputValues = {
-    name?: string;
-    telephone?: number;
-    DOB?: string;
+    firstname?: string;
+    lastname?: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+    dob?: string;
+    planstatus?: string;
 };
 export declare type RestaurantOwnerCreateFormValidationValues = {
-    name?: ValidationFunction<string>;
-    telephone?: ValidationFunction<number>;
-    DOB?: ValidationFunction<string>;
+    firstname?: ValidationFunction<string>;
+    lastname?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
+    phone?: ValidationFunction<string>;
+    address?: ValidationFunction<string>;
+    dob?: ValidationFunction<string>;
+    planstatus?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type RestaurantOwnerCreateFormOverridesProps = {
     RestaurantOwnerCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    name?: PrimitiveOverrideProps<TextFieldProps>;
-    telephone?: PrimitiveOverrideProps<TextFieldProps>;
-    DOB?: PrimitiveOverrideProps<TextFieldProps>;
+    firstname?: PrimitiveOverrideProps<TextFieldProps>;
+    lastname?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
+    phone?: PrimitiveOverrideProps<TextFieldProps>;
+    address?: PrimitiveOverrideProps<TextFieldProps>;
+    dob?: PrimitiveOverrideProps<TextFieldProps>;
+    planstatus?: PrimitiveOverrideProps<SelectFieldProps>;
 } & EscapeHatchProps;
 export declare type RestaurantOwnerCreateFormProps = React.PropsWithChildren<{
     overrides?: RestaurantOwnerCreateFormOverridesProps | undefined | null;

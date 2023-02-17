@@ -46,9 +46,9 @@ export default function UserCreateForm(props) {
   const validations = {
     name: [{ type: "Required" }],
     address: [{ type: "Required" }],
-    lat: [{ type: "Required" }],
-    lng: [{ type: "Required" }],
-    sub: [{ type: "Required" }],
+    lat: [],
+    lng: [],
+    sub: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -183,7 +183,7 @@ export default function UserCreateForm(props) {
       ></TextField>
       <TextField
         label="Lat"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         type="number"
         step="any"
@@ -215,7 +215,7 @@ export default function UserCreateForm(props) {
       ></TextField>
       <TextField
         label="Lng"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         type="number"
         step="any"
@@ -247,7 +247,7 @@ export default function UserCreateForm(props) {
       ></TextField>
       <TextField
         label="Sub"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={sub}
         onChange={(e) => {

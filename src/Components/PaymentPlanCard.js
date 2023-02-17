@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-const PaymentPlanCard = ({plandetails}) => {
+const PaymentPlanCard = ({plandetails, onCardClick}) => {
 
     const selectPlan = () => { 
         alert('free trial claimed')
@@ -20,7 +20,7 @@ const PaymentPlanCard = ({plandetails}) => {
                 <p>{item}</p>
             </Item>))}
         </Content>
-          <Footer onClick={() => {selectPlan()}}>
+          <Footer onClick={onCardClick}>
             <p>Get started</p>
         </Footer>
         

@@ -2,11 +2,24 @@ import React from 'react'
 import styled from 'styled-components'
 import SearchIcon from '@material-ui/icons/Search';
 import Avatar from '@mui/material/Avatar';
+import { useRestaurantOwnerContext } from '../Contexts/RestaurantOwnerContext';
+// import Title from 'antd/es/skeleton/Title';
 
 const Navbar = () => {
+
+    const { restaurantOwner } = useRestaurantOwnerContext();
+
+    console.log("res owner info: ", restaurantOwner)
+
   return (
     <ComponentWrapper>
-        <h4>Overview</h4>
+        {/* <div> */}
+        <Title>
+            <h4>Overview</h4>
+        </Title>
+            
+        {/* </div> */}
+        
 
         <div></div>
 
@@ -17,7 +30,7 @@ const Navbar = () => {
 
         <Profile>
             <Avatar sx={{ width: 32, height: 32 }} alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-            <p>Lawrence Darko</p>
+            {restaurantOwner && <p>{restaurantOwner?.name}</p>}
         </Profile>
     </ComponentWrapper>
   )
@@ -28,7 +41,7 @@ export default Navbar
 const ComponentWrapper = styled.div`
     display: flex;
     width: 100%;
-    height: 60px;
+    height: 100%;
     /* border: 1px solid red; */
     justify-content: space-between;
     padding-left: 50px;
@@ -37,11 +50,7 @@ const ComponentWrapper = styled.div`
     /* position: fixed; */
     /* margin-left: auto; */
 
-    >h4{
-        font-size: 30px;
-        font-family: 'Nunito Sans', sans-serif;
-        font-weight: bold;
-    }
+
 `
 export const HeaderSearch = styled.div`
     display: flex;
@@ -74,5 +83,20 @@ const Profile = styled.div`
     > p {
         margin-left: 20px;
 
+    }
+`
+const Title = styled.div`
+    display: flex;
+    height: 100%;
+    /* border: 1px solid red; */
+    
+
+    >h4{
+        font-size: 30px;
+        font-family: 'Nunito Sans', sans-serif;
+        font-weight: bold;
+        /* margin-bottom: 10px; */
+        /* padding-top: 0px; */
+        /* border: 1px solid red; */
     }
 `

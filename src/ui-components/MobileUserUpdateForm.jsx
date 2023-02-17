@@ -8,13 +8,13 @@
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { User } from "../models";
+import { MobileUser } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function UserUpdateForm(props) {
+export default function MobileUserUpdateForm(props) {
   const {
     id: idProp,
-    user,
+    mobileUser,
     onSuccess,
     onError,
     onSubmit,
@@ -37,8 +37,8 @@ export default function UserUpdateForm(props) {
   const [sub, setSub] = React.useState(initialValues.sub);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = userRecord
-      ? { ...initialValues, ...userRecord }
+    const cleanValues = mobileUserRecord
+      ? { ...initialValues, ...mobileUserRecord }
       : initialValues;
     setName(cleanValues.name);
     setAddress(cleanValues.address);
@@ -47,15 +47,17 @@ export default function UserUpdateForm(props) {
     setSub(cleanValues.sub);
     setErrors({});
   };
-  const [userRecord, setUserRecord] = React.useState(user);
+  const [mobileUserRecord, setMobileUserRecord] = React.useState(mobileUser);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(User, idProp) : user;
-      setUserRecord(record);
+      const record = idProp
+        ? await DataStore.query(MobileUser, idProp)
+        : mobileUser;
+      setMobileUserRecord(record);
     };
     queryData();
-  }, [idProp, user]);
-  React.useEffect(resetStateValues, [userRecord]);
+  }, [idProp, mobileUser]);
+  React.useEffect(resetStateValues, [mobileUserRecord]);
   const validations = {
     name: [{ type: "Required" }],
     address: [{ type: "Required" }],
@@ -123,7 +125,7 @@ export default function UserUpdateForm(props) {
             }
           });
           await DataStore.save(
-            User.copyOf(userRecord, (updated) => {
+            MobileUser.copyOf(mobileUserRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -136,7 +138,7 @@ export default function UserUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "UserUpdateForm")}
+      {...getOverrideProps(overrides, "MobileUserUpdateForm")}
       {...rest}
     >
       <TextField
@@ -298,7 +300,7 @@ export default function UserUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || user)}
+          isDisabled={!(idProp || mobileUser)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -310,7 +312,7 @@ export default function UserUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || user) ||
+              !(idProp || mobileUser) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

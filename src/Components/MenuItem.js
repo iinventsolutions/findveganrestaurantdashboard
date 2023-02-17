@@ -1,8 +1,39 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom';
+import { DataStore } from 'aws-amplify';
+import { Dish } from '../models';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Modal } from 'antd';
 
 
-const MenuItem = () => {
+
+const MenuItem = ({data}) => {
+
+    const navigate = useNavigate();
+
+    const deleteDishItem = async(id) => { 
+        // modal.destroy();
+        const item = await DataStore.query(Dish, id);
+        DataStore.delete(item)
+     }
+
+    const [modal, contextHolder] = Modal.useModal();
+    const confirm = (id) => {
+      modal.confirm({
+        title: 'Confirm',
+        icon: <ExclamationCircleOutlined />,
+        content: 'Do you want to delete this dish?',
+        okText: 'Yes',
+        cancelText: 'Cancel',
+        onOk: function(e){
+            // deleteDishItem(id);
+            // open = true
+            // window.location.reload()
+        }
+      });
+    };
+
   return (
     <ComponentWrapper>
         <div style={{width: '100%'}}>
@@ -10,25 +41,22 @@ const MenuItem = () => {
         </div>
         <MenuDetails>
             <RowOne>
-                <p>Veggies</p>
-                <p>$45.50</p>
+                <p>{data?.name}</p>
+                <p>GHS{data?.price}</p>
             </RowOne>
             <RowTwo>
                 <p>5-10min</p>
                 <div><p>In Stock</p></div>
             </RowTwo>
             <RowThree>
-                <p>Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit, sed do eiusmod tempor incidunt ut
-                labore et dolore magna aliqua.
-                Ut enim ad m.
-                </p>
+                <p>{data?.description}</p>
             </RowThree>
             <RowFour>
-                <div><p>Revome</p></div>
-                <div style={{backgroundColor: '#000000'}}><p>Edit</p></div>
+                <div style={{cursor: 'pointer'}} onClick={()=>confirm(data?.id)}><p>Revome</p></div>
+                <div style={{backgroundColor: '#000000', cursor: 'pointer'}} onClick={()=>navigate(`/edit-menu/${data?.id}`, {replace: true})}><p>Edit</p></div>
             </RowFour>
         </MenuDetails>
+        {contextHolder}
     </ComponentWrapper>
   )
 }

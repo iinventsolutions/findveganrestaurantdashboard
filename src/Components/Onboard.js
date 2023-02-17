@@ -35,7 +35,7 @@ const changeHandler = (e) => {
   return (
     <PageWrapper>
       {/* <Plan> */}
-          {showPlansection && <PaymentPlan />}
+          {showPlansection && <PaymentPlan onDismiss={onDismiss} setShowPlansection={setShowPlansection} registrationInfo={formData}/>}
       {/* </Plan> */}
     <ComponentWrapper>
         <SidePage>
@@ -52,9 +52,9 @@ const changeHandler = (e) => {
             <img src='/images/reviews.png' height='40px'width='250px' alt='reviews' />
           </TitleWrapper>
           
-            <div onClick={onDismiss}>
+            {/* <div onClick={onDismiss}>
             Got it!
-          </div>
+          </div> */}
         </SidePage>
         <ImageWrapper>
             <img src="/images/signuparrow.png"  alt="onboard" />
@@ -84,11 +84,15 @@ const ComponentWrapper = styled.div`
     height: 100vh;
     width: 100vw;
     background-color: #ffffff;
-    /* overflow: scroll; */
+
 
     @media only screen and (max-width: 600px) {
       flex-direction: column;
-      justify-content: center; 
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      overflow: scroll;
+      gap: 30px;
     }
 
 `
@@ -103,7 +107,7 @@ const SidePage = styled.div`
     overflow: hidden;
     /* border-right: 1px solid #e1e1e1; */
     padding: 20px;
-    border: 1px solid red;
+    /* border: 1px solid red; */
 
     @media only screen and (max-width: 600px) {
       width: 100%;
@@ -121,7 +125,7 @@ const MainPage = styled.div`
     background-color: #ffffff;
     overflow: hidden;
     padding: 20px;
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
     /* border-left: 1px solid #e1e1e1; */
 
     @media only screen and (max-width: 600px) {
@@ -198,7 +202,7 @@ const Plan = styled.div`
 `
 
 const PageWrapper = styled.div`
-  position: relative;
+  /* position: relative; */
   /* overflow: scroll; */
 `
 

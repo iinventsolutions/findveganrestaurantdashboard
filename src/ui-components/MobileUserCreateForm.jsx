@@ -8,13 +8,12 @@
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { User } from "../models";
+import { MobileUser } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function UserUpdateForm(props) {
+export default function MobileUserCreateForm(props) {
   const {
-    id: idProp,
-    user,
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -37,25 +36,13 @@ export default function UserUpdateForm(props) {
   const [sub, setSub] = React.useState(initialValues.sub);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = userRecord
-      ? { ...initialValues, ...userRecord }
-      : initialValues;
-    setName(cleanValues.name);
-    setAddress(cleanValues.address);
-    setLat(cleanValues.lat);
-    setLng(cleanValues.lng);
-    setSub(cleanValues.sub);
+    setName(initialValues.name);
+    setAddress(initialValues.address);
+    setLat(initialValues.lat);
+    setLng(initialValues.lng);
+    setSub(initialValues.sub);
     setErrors({});
   };
-  const [userRecord, setUserRecord] = React.useState(user);
-  React.useEffect(() => {
-    const queryData = async () => {
-      const record = idProp ? await DataStore.query(User, idProp) : user;
-      setUserRecord(record);
-    };
-    queryData();
-  }, [idProp, user]);
-  React.useEffect(resetStateValues, [userRecord]);
   const validations = {
     name: [{ type: "Required" }],
     address: [{ type: "Required" }],
@@ -122,13 +109,12 @@ export default function UserUpdateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(
-            User.copyOf(userRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
-          );
+          await DataStore.save(new MobileUser(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -136,7 +122,7 @@ export default function UserUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "UserUpdateForm")}
+      {...getOverrideProps(overrides, "MobileUserCreateForm")}
       {...rest}
     >
       <TextField
@@ -292,14 +278,13 @@ export default function UserUpdateForm(props) {
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Reset"
+          children="Clear"
           type="reset"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || user)}
-          {...getOverrideProps(overrides, "ResetButton")}
+          {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
         <Flex
           gap="15px"
@@ -309,10 +294,7 @@ export default function UserUpdateForm(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={
-              !(idProp || user) ||
-              Object.values(errors).some((e) => e?.hasError)
-            }
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

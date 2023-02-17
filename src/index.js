@@ -8,6 +8,9 @@ import '@aws-amplify/ui-react/styles.css'
 import { Amplify }  from 'aws-amplify';
 import config from './aws-exports'
 import { AmplifyProvider } from '@aws-amplify/ui-react';
+import { RestaurantContexProvider } from './Contexts/RestaurantContext';
+import { RestaurantOwnerContextProvider } from './Contexts/RestaurantOwnerContext';
+import { OrderContextProvider } from './Contexts/OrderContex';
 
 Amplify.configure(config)
 
@@ -15,7 +18,13 @@ Amplify.configure(config)
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AmplifyProvider>
-    <App />
+    <RestaurantContexProvider>
+      <RestaurantOwnerContextProvider>
+        <OrderContextProvider>
+          <App />
+        </OrderContextProvider>
+      </RestaurantOwnerContextProvider>
+    </RestaurantContexProvider>
   </AmplifyProvider>
 );
 

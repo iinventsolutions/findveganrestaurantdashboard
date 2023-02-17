@@ -5,20 +5,28 @@ import { schema } from './schema';
 const OrderStatus = {
   "NEW": "NEW",
   "COOKING": "COOKING",
+  "READY_FOR_PICKUP": "READY_FOR_PICKUP",
   "PICKED_UP": "PICKED_UP",
-  "COMPLETED": "COMPLETED"
+  "COMPLETED": "COMPLETED",
+  "ACCEPTED": "ACCEPTED",
+  "RESTAURANT_DECLINED": "RESTAURANT_DECLINED"
 };
 
-const { RestaurantOwner, Restaurant, Dish, Basket, BasketDish, OrderDish, Order, User } = initSchema(schema);
+const PlanSubscription = {
+  "BASIC": "BASIC",
+  "PREMIUM": "PREMIUM",
+  "SUPER": "SUPER"
+};
+
+const { Order, OrderDish, Dish, Restaurant, RestaurantOwner, UserMobile } = initSchema(schema);
 
 export {
-  RestaurantOwner,
-  Restaurant,
-  Dish,
-  Basket,
-  BasketDish,
-  OrderDish,
   Order,
-  User,
-  OrderStatus
+  OrderDish,
+  Dish,
+  Restaurant,
+  RestaurantOwner,
+  UserMobile,
+  OrderStatus,
+  PlanSubscription
 };

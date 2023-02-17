@@ -10,16 +10,26 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import CallReceivedOutlinedIcon from '@mui/icons-material/CallReceivedOutlined';
 import CallMadeOutlinedIcon from '@mui/icons-material/CallMadeOutlined';
 import DashboardChart from '../Components/DashboardChart';
+import { useNavigate } from 'react-router-dom';
+import Grid from 'antd/es/card/Grid';
 
 const Dashboard = () => {
+
+  const navigate = useNavigate();
+
   return (
     <ComponentWrapper>
       <Header>
         <p>Top Orders</p>
-        <Sort>
-          <SwapVertIcon />
-          <p>sort by</p>
-        </Sort>
+        <div style={{display: 'flex', gap: 10, cursor: 'pointer'}}>
+          <Sort>
+            <SwapVertIcon />
+            <p>sort by</p>
+          </Sort>
+          <NewResButton onClick={()=>navigate('add-restaurant')}>
+            <p>New restaurant</p>
+          </NewResButton>
+        </div>
       </Header>
 
       <OrderShortList>
@@ -125,5 +135,19 @@ const CardWrapper = styled.div`
   /* margin-top: 20px; */
   height: 100%;
   border: 1px solid gray;
+`
+export const NewResButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 25px;
+  background-color: #FF9900;
+  border-radius: 3px;
+  cursor: pointer;
+  >p{
+    color: #fff;
+    font-size: 12px;
+  }
 `
 

@@ -8,13 +8,13 @@
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { User } from "../models";
+import { UserMobile } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function UserUpdateForm(props) {
+export default function UserMobileUpdateForm(props) {
   const {
     id: idProp,
-    user,
+    userMobile,
     onSuccess,
     onError,
     onSubmit,
@@ -37,8 +37,8 @@ export default function UserUpdateForm(props) {
   const [sub, setSub] = React.useState(initialValues.sub);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = userRecord
-      ? { ...initialValues, ...userRecord }
+    const cleanValues = userMobileRecord
+      ? { ...initialValues, ...userMobileRecord }
       : initialValues;
     setName(cleanValues.name);
     setAddress(cleanValues.address);
@@ -47,21 +47,23 @@ export default function UserUpdateForm(props) {
     setSub(cleanValues.sub);
     setErrors({});
   };
-  const [userRecord, setUserRecord] = React.useState(user);
+  const [userMobileRecord, setUserMobileRecord] = React.useState(userMobile);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(User, idProp) : user;
-      setUserRecord(record);
+      const record = idProp
+        ? await DataStore.query(UserMobile, idProp)
+        : userMobile;
+      setUserMobileRecord(record);
     };
     queryData();
-  }, [idProp, user]);
-  React.useEffect(resetStateValues, [userRecord]);
+  }, [idProp, userMobile]);
+  React.useEffect(resetStateValues, [userMobileRecord]);
   const validations = {
     name: [{ type: "Required" }],
     address: [{ type: "Required" }],
-    lat: [],
-    lng: [],
-    sub: [],
+    lat: [{ type: "Required" }],
+    lng: [{ type: "Required" }],
+    sub: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -123,7 +125,7 @@ export default function UserUpdateForm(props) {
             }
           });
           await DataStore.save(
-            User.copyOf(userRecord, (updated) => {
+            UserMobile.copyOf(userMobileRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -136,7 +138,7 @@ export default function UserUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "UserUpdateForm")}
+      {...getOverrideProps(overrides, "UserMobileUpdateForm")}
       {...rest}
     >
       <TextField
@@ -197,7 +199,7 @@ export default function UserUpdateForm(props) {
       ></TextField>
       <TextField
         label="Lat"
-        isRequired={false}
+        isRequired={true}
         isReadOnly={false}
         type="number"
         step="any"
@@ -229,7 +231,7 @@ export default function UserUpdateForm(props) {
       ></TextField>
       <TextField
         label="Lng"
-        isRequired={false}
+        isRequired={true}
         isReadOnly={false}
         type="number"
         step="any"
@@ -261,7 +263,7 @@ export default function UserUpdateForm(props) {
       ></TextField>
       <TextField
         label="Sub"
-        isRequired={false}
+        isRequired={true}
         isReadOnly={false}
         value={sub}
         onChange={(e) => {
@@ -298,7 +300,7 @@ export default function UserUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || user)}
+          isDisabled={!(idProp || userMobile)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -310,7 +312,7 @@ export default function UserUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || user) ||
+              !(idProp || userMobile) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components';
 import PrintIcon from '@mui/icons-material/Print';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -12,10 +12,30 @@ import OrderState from '../Components/OrderStateItem';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import ForwardIcon from '@mui/icons-material/Forward';
 import OrderListItem from '../Components/OrderListItem';
+import { DataStore } from 'aws-amplify';
+import { Order } from '../models';
 import { Grid } from '@material-ui/core';
+import Table from '../Components/Table';
+import { useRestaurantContex } from '../Contexts/RestaurantContext';
 
 
 const OrderList = () => {
+
+  const { restaurant } = useRestaurantContex();
+
+  const [orders, setOrders] = useState()
+
+  useEffect(() => {
+    if(!restaurant?.id){
+      return;
+    }
+    console.log("restaurant id is: ",restaurant?.id)
+    DataStore.query(Order, (o)=> o.orderRestaurantId.eq(restaurant?.id)).then(setOrders)
+    // window.location.reload()
+  }, [])
+
+  console.log(orders)
+  
 
 
   return (
@@ -81,7 +101,7 @@ const OrderList = () => {
           </div>
       </OrderStatus>
       <OrderListWrapper>
-        <OrderListHeader>
+        {/* <OrderListHeader>
             <p>Order ID</p>
             <p>Date</p>
             <p>Customer Name</p>
@@ -97,8 +117,8 @@ const OrderList = () => {
             <OrderListItem />
             <OrderListItem />
             <OrderListItem />
-            {/* <OrderListItem /> */}
-        </OrderListBody>
+        </OrderListBody> */}
+        <Table orderData={orders}/>
       </OrderListWrapper>
       {/* </Grid> */}
     </ComponentWrapper>
@@ -268,3 +288,39 @@ const OrderListBody = styled.div`
     overflow: auto;
     margin-top: 10px;
 `
+
+// GPT Table
+// const TableContainer = styled.div`
+//   display: table;
+//   width: 100%;
+//   max-width: 100%;
+//   margin-bottom: 1rem;
+//   background-color: transparent;
+// `;
+
+// const TableHead = styled.div`
+//   display: table-header-group;
+//   vertical-align: middle;
+//   border-color: inherit;
+// `;
+
+// const TableRow = styled.div`
+//   display: table-row;
+//   vertical-align: inherit;
+//   border-color: inherit;
+// `;
+
+// const TableHeading = styled.div`
+//   display: table-cell;
+//   vertical-align: inherit;
+//   border-color: inherit;
+//   font-weight: bold;
+//   padding: 0.75rem;
+// `;
+
+// const TableData = styled.div`
+//   display: table-cell;
+//   vertical-align: inherit;
+//   border-color: inherit;
+//   padding: 0.75rem;
+// `;

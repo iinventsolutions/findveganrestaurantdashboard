@@ -31,7 +31,7 @@ export const inputData = [
         id: 4,
         type: 'tel',
         name: 'phone',
-        placeholder: 'Phone',
+        placeholder: 'Phone (+233234567890)',
         required: true,
         errMsg: 'Phone number cannot be empty',
         pattern: '^[A-Za-z0-9]{1,}$'

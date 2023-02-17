@@ -25,44 +25,57 @@ export default function RestaurantUpdateForm(props) {
   } = props;
   const initialValues = {
     name: "",
-    deliveryFee: "",
-    minDeliveryTime: "",
-    maxDeliveryTime: "",
-    rating: "",
-    address: "",
     image: "",
+    deliveryFee: "",
+    minDelivery: "",
+    maxDelivery: "",
+    address: "",
     lat: "",
     lng: "",
+    sub: "",
+    openingTime: "",
+    closingTime: "",
+    phone: "",
   };
   const [name, setName] = React.useState(initialValues.name);
+  const [image, setImage] = React.useState(initialValues.image);
   const [deliveryFee, setDeliveryFee] = React.useState(
     initialValues.deliveryFee
   );
-  const [minDeliveryTime, setMinDeliveryTime] = React.useState(
-    initialValues.minDeliveryTime
+  const [minDelivery, setMinDelivery] = React.useState(
+    initialValues.minDelivery
   );
-  const [maxDeliveryTime, setMaxDeliveryTime] = React.useState(
-    initialValues.maxDeliveryTime
+  const [maxDelivery, setMaxDelivery] = React.useState(
+    initialValues.maxDelivery
   );
-  const [rating, setRating] = React.useState(initialValues.rating);
   const [address, setAddress] = React.useState(initialValues.address);
-  const [image, setImage] = React.useState(initialValues.image);
   const [lat, setLat] = React.useState(initialValues.lat);
   const [lng, setLng] = React.useState(initialValues.lng);
+  const [sub, setSub] = React.useState(initialValues.sub);
+  const [openingTime, setOpeningTime] = React.useState(
+    initialValues.openingTime
+  );
+  const [closingTime, setClosingTime] = React.useState(
+    initialValues.closingTime
+  );
+  const [phone, setPhone] = React.useState(initialValues.phone);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = restaurantRecord
       ? { ...initialValues, ...restaurantRecord }
       : initialValues;
     setName(cleanValues.name);
-    setDeliveryFee(cleanValues.deliveryFee);
-    setMinDeliveryTime(cleanValues.minDeliveryTime);
-    setMaxDeliveryTime(cleanValues.maxDeliveryTime);
-    setRating(cleanValues.rating);
-    setAddress(cleanValues.address);
     setImage(cleanValues.image);
+    setDeliveryFee(cleanValues.deliveryFee);
+    setMinDelivery(cleanValues.minDelivery);
+    setMaxDelivery(cleanValues.maxDelivery);
+    setAddress(cleanValues.address);
     setLat(cleanValues.lat);
     setLng(cleanValues.lng);
+    setSub(cleanValues.sub);
+    setOpeningTime(cleanValues.openingTime);
+    setClosingTime(cleanValues.closingTime);
+    setPhone(cleanValues.phone);
     setErrors({});
   };
   const [restaurantRecord, setRestaurantRecord] = React.useState(restaurant);
@@ -78,14 +91,17 @@ export default function RestaurantUpdateForm(props) {
   React.useEffect(resetStateValues, [restaurantRecord]);
   const validations = {
     name: [{ type: "Required" }],
-    deliveryFee: [{ type: "Required" }],
-    minDeliveryTime: [],
-    maxDeliveryTime: [],
-    rating: [],
-    address: [{ type: "Required" }],
-    image: [{ type: "Required" }],
+    image: [],
+    deliveryFee: [],
+    minDelivery: [],
+    maxDelivery: [],
+    address: [],
     lat: [{ type: "Required" }],
     lng: [{ type: "Required" }],
+    sub: [],
+    openingTime: [],
+    closingTime: [],
+    phone: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -113,14 +129,17 @@ export default function RestaurantUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          deliveryFee,
-          minDeliveryTime,
-          maxDeliveryTime,
-          rating,
-          address,
           image,
+          deliveryFee,
+          minDelivery,
+          maxDelivery,
+          address,
           lat,
           lng,
+          sub,
+          openingTime,
+          closingTime,
+          phone,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -177,14 +196,17 @@ export default function RestaurantUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              deliveryFee,
-              minDeliveryTime,
-              maxDeliveryTime,
-              rating,
-              address,
               image,
+              deliveryFee,
+              minDelivery,
+              maxDelivery,
+              address,
               lat,
               lng,
+              sub,
+              openingTime,
+              closingTime,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -200,184 +222,8 @@ export default function RestaurantUpdateForm(props) {
         {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
-        label="Delivery fee"
-        isRequired={true}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={deliveryFee}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              name,
-              deliveryFee: value,
-              minDeliveryTime,
-              maxDeliveryTime,
-              rating,
-              address,
-              image,
-              lat,
-              lng,
-            };
-            const result = onChange(modelFields);
-            value = result?.deliveryFee ?? value;
-          }
-          if (errors.deliveryFee?.hasError) {
-            runValidationTasks("deliveryFee", value);
-          }
-          setDeliveryFee(value);
-        }}
-        onBlur={() => runValidationTasks("deliveryFee", deliveryFee)}
-        errorMessage={errors.deliveryFee?.errorMessage}
-        hasError={errors.deliveryFee?.hasError}
-        {...getOverrideProps(overrides, "deliveryFee")}
-      ></TextField>
-      <TextField
-        label="Min delivery time"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={minDeliveryTime}
-        onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              name,
-              deliveryFee,
-              minDeliveryTime: value,
-              maxDeliveryTime,
-              rating,
-              address,
-              image,
-              lat,
-              lng,
-            };
-            const result = onChange(modelFields);
-            value = result?.minDeliveryTime ?? value;
-          }
-          if (errors.minDeliveryTime?.hasError) {
-            runValidationTasks("minDeliveryTime", value);
-          }
-          setMinDeliveryTime(value);
-        }}
-        onBlur={() => runValidationTasks("minDeliveryTime", minDeliveryTime)}
-        errorMessage={errors.minDeliveryTime?.errorMessage}
-        hasError={errors.minDeliveryTime?.hasError}
-        {...getOverrideProps(overrides, "minDeliveryTime")}
-      ></TextField>
-      <TextField
-        label="Max delivery time"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={maxDeliveryTime}
-        onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              name,
-              deliveryFee,
-              minDeliveryTime,
-              maxDeliveryTime: value,
-              rating,
-              address,
-              image,
-              lat,
-              lng,
-            };
-            const result = onChange(modelFields);
-            value = result?.maxDeliveryTime ?? value;
-          }
-          if (errors.maxDeliveryTime?.hasError) {
-            runValidationTasks("maxDeliveryTime", value);
-          }
-          setMaxDeliveryTime(value);
-        }}
-        onBlur={() => runValidationTasks("maxDeliveryTime", maxDeliveryTime)}
-        errorMessage={errors.maxDeliveryTime?.errorMessage}
-        hasError={errors.maxDeliveryTime?.hasError}
-        {...getOverrideProps(overrides, "maxDeliveryTime")}
-      ></TextField>
-      <TextField
-        label="Rating"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={rating}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              name,
-              deliveryFee,
-              minDeliveryTime,
-              maxDeliveryTime,
-              rating: value,
-              address,
-              image,
-              lat,
-              lng,
-            };
-            const result = onChange(modelFields);
-            value = result?.rating ?? value;
-          }
-          if (errors.rating?.hasError) {
-            runValidationTasks("rating", value);
-          }
-          setRating(value);
-        }}
-        onBlur={() => runValidationTasks("rating", rating)}
-        errorMessage={errors.rating?.errorMessage}
-        hasError={errors.rating?.hasError}
-        {...getOverrideProps(overrides, "rating")}
-      ></TextField>
-      <TextField
-        label="Address"
-        isRequired={true}
-        isReadOnly={false}
-        value={address}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              deliveryFee,
-              minDeliveryTime,
-              maxDeliveryTime,
-              rating,
-              address: value,
-              image,
-              lat,
-              lng,
-            };
-            const result = onChange(modelFields);
-            value = result?.address ?? value;
-          }
-          if (errors.address?.hasError) {
-            runValidationTasks("address", value);
-          }
-          setAddress(value);
-        }}
-        onBlur={() => runValidationTasks("address", address)}
-        errorMessage={errors.address?.errorMessage}
-        hasError={errors.address?.hasError}
-        {...getOverrideProps(overrides, "address")}
-      ></TextField>
-      <TextField
         label="Image"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={image}
         onChange={(e) => {
@@ -385,14 +231,17 @@ export default function RestaurantUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              deliveryFee,
-              minDeliveryTime,
-              maxDeliveryTime,
-              rating,
-              address,
               image: value,
+              deliveryFee,
+              minDelivery,
+              maxDelivery,
+              address,
               lat,
               lng,
+              sub,
+              openingTime,
+              closingTime,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.image ?? value;
@@ -408,6 +257,158 @@ export default function RestaurantUpdateForm(props) {
         {...getOverrideProps(overrides, "image")}
       ></TextField>
       <TextField
+        label="Delivery fee"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={deliveryFee}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              image,
+              deliveryFee: value,
+              minDelivery,
+              maxDelivery,
+              address,
+              lat,
+              lng,
+              sub,
+              openingTime,
+              closingTime,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.deliveryFee ?? value;
+          }
+          if (errors.deliveryFee?.hasError) {
+            runValidationTasks("deliveryFee", value);
+          }
+          setDeliveryFee(value);
+        }}
+        onBlur={() => runValidationTasks("deliveryFee", deliveryFee)}
+        errorMessage={errors.deliveryFee?.errorMessage}
+        hasError={errors.deliveryFee?.hasError}
+        {...getOverrideProps(overrides, "deliveryFee")}
+      ></TextField>
+      <TextField
+        label="Min delivery"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={minDelivery}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              image,
+              deliveryFee,
+              minDelivery: value,
+              maxDelivery,
+              address,
+              lat,
+              lng,
+              sub,
+              openingTime,
+              closingTime,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.minDelivery ?? value;
+          }
+          if (errors.minDelivery?.hasError) {
+            runValidationTasks("minDelivery", value);
+          }
+          setMinDelivery(value);
+        }}
+        onBlur={() => runValidationTasks("minDelivery", minDelivery)}
+        errorMessage={errors.minDelivery?.errorMessage}
+        hasError={errors.minDelivery?.hasError}
+        {...getOverrideProps(overrides, "minDelivery")}
+      ></TextField>
+      <TextField
+        label="Max delivery"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={maxDelivery}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              image,
+              deliveryFee,
+              minDelivery,
+              maxDelivery: value,
+              address,
+              lat,
+              lng,
+              sub,
+              openingTime,
+              closingTime,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.maxDelivery ?? value;
+          }
+          if (errors.maxDelivery?.hasError) {
+            runValidationTasks("maxDelivery", value);
+          }
+          setMaxDelivery(value);
+        }}
+        onBlur={() => runValidationTasks("maxDelivery", maxDelivery)}
+        errorMessage={errors.maxDelivery?.errorMessage}
+        hasError={errors.maxDelivery?.hasError}
+        {...getOverrideProps(overrides, "maxDelivery")}
+      ></TextField>
+      <TextField
+        label="Address"
+        isRequired={false}
+        isReadOnly={false}
+        value={address}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              image,
+              deliveryFee,
+              minDelivery,
+              maxDelivery,
+              address: value,
+              lat,
+              lng,
+              sub,
+              openingTime,
+              closingTime,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.address ?? value;
+          }
+          if (errors.address?.hasError) {
+            runValidationTasks("address", value);
+          }
+          setAddress(value);
+        }}
+        onBlur={() => runValidationTasks("address", address)}
+        errorMessage={errors.address?.errorMessage}
+        hasError={errors.address?.hasError}
+        {...getOverrideProps(overrides, "address")}
+      ></TextField>
+      <TextField
         label="Lat"
         isRequired={true}
         isReadOnly={false}
@@ -421,14 +422,17 @@ export default function RestaurantUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              deliveryFee,
-              minDeliveryTime,
-              maxDeliveryTime,
-              rating,
-              address,
               image,
+              deliveryFee,
+              minDelivery,
+              maxDelivery,
+              address,
               lat: value,
               lng,
+              sub,
+              openingTime,
+              closingTime,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.lat ?? value;
@@ -457,14 +461,17 @@ export default function RestaurantUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              deliveryFee,
-              minDeliveryTime,
-              maxDeliveryTime,
-              rating,
-              address,
               image,
+              deliveryFee,
+              minDelivery,
+              maxDelivery,
+              address,
               lat,
               lng: value,
+              sub,
+              openingTime,
+              closingTime,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.lng ?? value;
@@ -478,6 +485,146 @@ export default function RestaurantUpdateForm(props) {
         errorMessage={errors.lng?.errorMessage}
         hasError={errors.lng?.hasError}
         {...getOverrideProps(overrides, "lng")}
+      ></TextField>
+      <TextField
+        label="Sub"
+        isRequired={false}
+        isReadOnly={false}
+        value={sub}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              image,
+              deliveryFee,
+              minDelivery,
+              maxDelivery,
+              address,
+              lat,
+              lng,
+              sub: value,
+              openingTime,
+              closingTime,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.sub ?? value;
+          }
+          if (errors.sub?.hasError) {
+            runValidationTasks("sub", value);
+          }
+          setSub(value);
+        }}
+        onBlur={() => runValidationTasks("sub", sub)}
+        errorMessage={errors.sub?.errorMessage}
+        hasError={errors.sub?.hasError}
+        {...getOverrideProps(overrides, "sub")}
+      ></TextField>
+      <TextField
+        label="Opening time"
+        isRequired={false}
+        isReadOnly={false}
+        value={openingTime}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              image,
+              deliveryFee,
+              minDelivery,
+              maxDelivery,
+              address,
+              lat,
+              lng,
+              sub,
+              openingTime: value,
+              closingTime,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.openingTime ?? value;
+          }
+          if (errors.openingTime?.hasError) {
+            runValidationTasks("openingTime", value);
+          }
+          setOpeningTime(value);
+        }}
+        onBlur={() => runValidationTasks("openingTime", openingTime)}
+        errorMessage={errors.openingTime?.errorMessage}
+        hasError={errors.openingTime?.hasError}
+        {...getOverrideProps(overrides, "openingTime")}
+      ></TextField>
+      <TextField
+        label="Closing time"
+        isRequired={false}
+        isReadOnly={false}
+        value={closingTime}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              image,
+              deliveryFee,
+              minDelivery,
+              maxDelivery,
+              address,
+              lat,
+              lng,
+              sub,
+              openingTime,
+              closingTime: value,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.closingTime ?? value;
+          }
+          if (errors.closingTime?.hasError) {
+            runValidationTasks("closingTime", value);
+          }
+          setClosingTime(value);
+        }}
+        onBlur={() => runValidationTasks("closingTime", closingTime)}
+        errorMessage={errors.closingTime?.errorMessage}
+        hasError={errors.closingTime?.hasError}
+        {...getOverrideProps(overrides, "closingTime")}
+      ></TextField>
+      <TextField
+        label="Phone"
+        isRequired={false}
+        isReadOnly={false}
+        value={phone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              image,
+              deliveryFee,
+              minDelivery,
+              maxDelivery,
+              address,
+              lat,
+              lng,
+              sub,
+              openingTime,
+              closingTime,
+              phone: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone ?? value;
+          }
+          if (errors.phone?.hasError) {
+            runValidationTasks("phone", value);
+          }
+          setPhone(value);
+        }}
+        onBlur={() => runValidationTasks("phone", phone)}
+        errorMessage={errors.phone?.errorMessage}
+        hasError={errors.phone?.hasError}
+        {...getOverrideProps(overrides, "phone")}
       ></TextField>
       <Flex
         justifyContent="space-between"

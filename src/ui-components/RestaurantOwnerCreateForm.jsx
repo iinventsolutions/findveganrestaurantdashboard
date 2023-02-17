@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SelectField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { RestaurantOwner } from "../models";
 import { fetchByPath, validateField } from "./utils";
@@ -23,24 +29,40 @@ export default function RestaurantOwnerCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: "",
-    telephone: "",
-    DOB: "",
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    address: "",
+    dob: "",
+    planstatus: undefined,
   };
-  const [name, setName] = React.useState(initialValues.name);
-  const [telephone, setTelephone] = React.useState(initialValues.telephone);
-  const [DOB, setDOB] = React.useState(initialValues.DOB);
+  const [firstname, setFirstname] = React.useState(initialValues.firstname);
+  const [lastname, setLastname] = React.useState(initialValues.lastname);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [phone, setPhone] = React.useState(initialValues.phone);
+  const [address, setAddress] = React.useState(initialValues.address);
+  const [dob, setDob] = React.useState(initialValues.dob);
+  const [planstatus, setPlanstatus] = React.useState(initialValues.planstatus);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(initialValues.name);
-    setTelephone(initialValues.telephone);
-    setDOB(initialValues.DOB);
+    setFirstname(initialValues.firstname);
+    setLastname(initialValues.lastname);
+    setEmail(initialValues.email);
+    setPhone(initialValues.phone);
+    setAddress(initialValues.address);
+    setDob(initialValues.dob);
+    setPlanstatus(initialValues.planstatus);
     setErrors({});
   };
   const validations = {
-    name: [{ type: "Required" }],
-    telephone: [{ type: "Required" }],
-    DOB: [],
+    firstname: [{ type: "Required" }],
+    lastname: [{ type: "Required" }],
+    email: [{ type: "Required" }],
+    phone: [],
+    address: [],
+    dob: [],
+    planstatus: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -67,9 +89,13 @@ export default function RestaurantOwnerCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name,
-          telephone,
-          DOB,
+          firstname,
+          lastname,
+          email,
+          phone,
+          address,
+          dob,
+          planstatus,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -116,88 +142,232 @@ export default function RestaurantOwnerCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Name"
+        label="Firstname"
         isRequired={true}
         isReadOnly={false}
-        value={name}
+        value={firstname}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name: value,
-              telephone,
-              DOB,
+              firstname: value,
+              lastname,
+              email,
+              phone,
+              address,
+              dob,
+              planstatus,
             };
             const result = onChange(modelFields);
-            value = result?.name ?? value;
+            value = result?.firstname ?? value;
           }
-          if (errors.name?.hasError) {
-            runValidationTasks("name", value);
+          if (errors.firstname?.hasError) {
+            runValidationTasks("firstname", value);
           }
-          setName(value);
+          setFirstname(value);
         }}
-        onBlur={() => runValidationTasks("name", name)}
-        errorMessage={errors.name?.errorMessage}
-        hasError={errors.name?.hasError}
-        {...getOverrideProps(overrides, "name")}
+        onBlur={() => runValidationTasks("firstname", firstname)}
+        errorMessage={errors.firstname?.errorMessage}
+        hasError={errors.firstname?.hasError}
+        {...getOverrideProps(overrides, "firstname")}
       ></TextField>
       <TextField
-        label="Telephone"
+        label="Lastname"
         isRequired={true}
         isReadOnly={false}
-        type="number"
-        step="any"
-        value={telephone}
+        value={lastname}
         onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
-              telephone: value,
-              DOB,
+              firstname,
+              lastname: value,
+              email,
+              phone,
+              address,
+              dob,
+              planstatus,
             };
             const result = onChange(modelFields);
-            value = result?.telephone ?? value;
+            value = result?.lastname ?? value;
           }
-          if (errors.telephone?.hasError) {
-            runValidationTasks("telephone", value);
+          if (errors.lastname?.hasError) {
+            runValidationTasks("lastname", value);
           }
-          setTelephone(value);
+          setLastname(value);
         }}
-        onBlur={() => runValidationTasks("telephone", telephone)}
-        errorMessage={errors.telephone?.errorMessage}
-        hasError={errors.telephone?.hasError}
-        {...getOverrideProps(overrides, "telephone")}
+        onBlur={() => runValidationTasks("lastname", lastname)}
+        errorMessage={errors.lastname?.errorMessage}
+        hasError={errors.lastname?.hasError}
+        {...getOverrideProps(overrides, "lastname")}
+      ></TextField>
+      <TextField
+        label="Email"
+        isRequired={true}
+        isReadOnly={false}
+        value={email}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstname,
+              lastname,
+              email: value,
+              phone,
+              address,
+              dob,
+              planstatus,
+            };
+            const result = onChange(modelFields);
+            value = result?.email ?? value;
+          }
+          if (errors.email?.hasError) {
+            runValidationTasks("email", value);
+          }
+          setEmail(value);
+        }}
+        onBlur={() => runValidationTasks("email", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, "email")}
+      ></TextField>
+      <TextField
+        label="Phone"
+        isRequired={false}
+        isReadOnly={false}
+        value={phone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstname,
+              lastname,
+              email,
+              phone: value,
+              address,
+              dob,
+              planstatus,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone ?? value;
+          }
+          if (errors.phone?.hasError) {
+            runValidationTasks("phone", value);
+          }
+          setPhone(value);
+        }}
+        onBlur={() => runValidationTasks("phone", phone)}
+        errorMessage={errors.phone?.errorMessage}
+        hasError={errors.phone?.hasError}
+        {...getOverrideProps(overrides, "phone")}
+      ></TextField>
+      <TextField
+        label="Address"
+        isRequired={false}
+        isReadOnly={false}
+        value={address}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstname,
+              lastname,
+              email,
+              phone,
+              address: value,
+              dob,
+              planstatus,
+            };
+            const result = onChange(modelFields);
+            value = result?.address ?? value;
+          }
+          if (errors.address?.hasError) {
+            runValidationTasks("address", value);
+          }
+          setAddress(value);
+        }}
+        onBlur={() => runValidationTasks("address", address)}
+        errorMessage={errors.address?.errorMessage}
+        hasError={errors.address?.hasError}
+        {...getOverrideProps(overrides, "address")}
       ></TextField>
       <TextField
         label="Dob"
         isRequired={false}
         isReadOnly={false}
         type="date"
-        value={DOB}
+        value={dob}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
-              telephone,
-              DOB: value,
+              firstname,
+              lastname,
+              email,
+              phone,
+              address,
+              dob: value,
+              planstatus,
             };
             const result = onChange(modelFields);
-            value = result?.DOB ?? value;
+            value = result?.dob ?? value;
           }
-          if (errors.DOB?.hasError) {
-            runValidationTasks("DOB", value);
+          if (errors.dob?.hasError) {
+            runValidationTasks("dob", value);
           }
-          setDOB(value);
+          setDob(value);
         }}
-        onBlur={() => runValidationTasks("DOB", DOB)}
-        errorMessage={errors.DOB?.errorMessage}
-        hasError={errors.DOB?.hasError}
-        {...getOverrideProps(overrides, "DOB")}
+        onBlur={() => runValidationTasks("dob", dob)}
+        errorMessage={errors.dob?.errorMessage}
+        hasError={errors.dob?.hasError}
+        {...getOverrideProps(overrides, "dob")}
       ></TextField>
+      <SelectField
+        label="Planstatus"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={planstatus}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstname,
+              lastname,
+              email,
+              phone,
+              address,
+              dob,
+              planstatus: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.planstatus ?? value;
+          }
+          if (errors.planstatus?.hasError) {
+            runValidationTasks("planstatus", value);
+          }
+          setPlanstatus(value);
+        }}
+        onBlur={() => runValidationTasks("planstatus", planstatus)}
+        errorMessage={errors.planstatus?.errorMessage}
+        hasError={errors.planstatus?.hasError}
+        {...getOverrideProps(overrides, "planstatus")}
+      >
+        <option
+          children="Basic"
+          value="BASIC"
+          {...getOverrideProps(overrides, "planstatusoption0")}
+        ></option>
+        <option
+          children="Premium"
+          value="PREMIUM"
+          {...getOverrideProps(overrides, "planstatusoption1")}
+        ></option>
+        <option
+          children="Super"
+          value="SUPER"
+          {...getOverrideProps(overrides, "planstatusoption2")}
+        ></option>
+      </SelectField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
