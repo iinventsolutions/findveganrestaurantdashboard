@@ -19,6 +19,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "subtotal": {
+                    "name": "subtotal",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "OrderDishes": {
                     "name": "OrderDishes",
                     "isArray": true,
@@ -52,13 +59,6 @@ export const schema = {
                     "isArray": false,
                     "type": "ID",
                     "isRequired": true,
-                    "attributes": []
-                },
-                "subtotal": {
-                    "name": "subtotal",
-                    "isArray": false,
-                    "type": "Float",
-                    "isRequired": false,
                     "attributes": []
                 },
                 "createdAt": {
@@ -522,6 +522,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "sub": {
+                    "name": "sub",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -690,5 +697,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.3.5",
-    "version": "c64c555a50cf5c025d2bb9893eefcfeb"
+    "version": "3713a31a4d6543e4c597bb7f129e3618"
 };

@@ -9,10 +9,12 @@ import { PlanDataOne, PlanDataTwo, PlanDataThree } from './PlanData'
 import CloseIcon from '@mui/icons-material/Close';
 // import { useRestaurantOwnerContext } from '../Contexts/RestaurantOwnerContext';
 import { useRestaurantContex } from '../Contexts/RestaurantContext';
+import { useRestaurantOwnerContext } from '../Contexts/RestaurantOwnerContext';
 
 const PaymentPlan = ({registrationInfo, setShowPlansection, onDismiss}) => {
 
   const { sub } = useRestaurantContex();
+  const { setCheckOwnerExistence } = useRestaurantOwnerContext();
 
   console.log("sub in PaymentPlan", sub)
 
@@ -148,7 +150,7 @@ const PaymentPlan = ({registrationInfo, setShowPlansection, onDismiss}) => {
             </StatusMessage>}
 
             {status === 'success' && <StatusMessage successcolor>
-            <p onClick={onDismiss}>Account created! Click here to start</p>
+            <p onClick={()=>setCheckOwnerExistence(false)}>Account created! Click here to start</p>
             </StatusMessage>}
 
     </ComponentWrapper>

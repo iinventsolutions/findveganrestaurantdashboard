@@ -16,6 +16,7 @@ import { withAuthenticator, View, useTheme, Text } from '@aws-amplify/ui-react';
 import SideMenu from './Components/SideMenu';
 import MenuOpenSharpIcon from '@mui/icons-material/MenuOpenSharp';
 import { useRestaurantOwnerContext } from './Contexts/RestaurantOwnerContext';
+import CheckInternet from './Components/CheckInternet';
 
 const { Sider, Content, Footer, Header} = Layout;
 
@@ -24,8 +25,9 @@ Amplify.configure(awsconfig);
 function App({signOut, user}) {
 
 
-
-  const [showOnboarding, setShowOnboarding] = useState(null);
+  const { restaurantOwner, checkOwnerExistence } = useRestaurantOwnerContext();
+  
+  const [showOnboarding, setShowOnboarding] = useState(checkOwnerExistence);
 
   useEffect(() => {
     const storedShowOnboarding = localStorage.getItem('showOnboarding');
@@ -41,25 +43,28 @@ function App({signOut, user}) {
     localStorage.setItem('showOnboarding', JSON.stringify(false));
   };
 
-    // const { restaurantOwner } = useRestaurantOwnerContext();
-  // if (!restaurantOwner) return null;
 
-  // const [currentUser, setCurrentUser] = useState(null)
-  // && restaurantOwner.length > 0 
+
+    console.log("The Restaurant Owner ", restaurantOwner)
+
+    console.log("ONBOARDING STATE: ", checkOwnerExistence)
+
+
+
   return (
     <div>
-      {showOnboarding === null ? null : showOnboarding ? 
-      (
-        <OnboardingScreen onDismiss={handleOnboardingDismiss} />
-        ) : (
-          <MainPage signOut={signOut} user={user} />
-      )}
-      {/* {!restaurantOwner?.length > 0 ? 
+      {/* {showOnboarding === null ? null : showOnboarding ? 
       (
         <OnboardingScreen onDismiss={handleOnboardingDismiss} />
         ) : (
           <MainPage signOut={signOut} user={user} />
       )} */}
+      {checkOwnerExistence === null ? <CheckInternet /> : checkOwnerExistence ? 
+      (
+        <OnboardingScreen onDismiss={handleOnboardingDismiss} />
+        ) : (
+          <MainPage signOut={signOut} user={user} />
+      )}
   </div>
   );
 }
@@ -81,7 +86,7 @@ function MainPage({ signOut, user }) {
           <Image width={collapsed? 65 : 150} style={{marginLeft: 10, marginTop: 10}} src='/images/logo.png'/>
           <SideMenu signOut={signOut}/>
 
-          {collapsed == false && <div style={{marginTop: '70px', marginLeft: '20px', marginBottom: 20, width: '100%'}}>
+          {collapsed === false && <div style={{marginTop: '70px', marginLeft: '20px', marginBottom: 20, width: '100%'}}>
             <img className='sidebarImage' height={200} width={170} src='/images/upgrade.png' />
           </div>}
 

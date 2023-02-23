@@ -10,9 +10,11 @@ import { useRestaurantContex } from '../Contexts/RestaurantContext';
 
 
 
+
 const NewRestaurantForm = () => {
 
     const { sub } = useRestaurantContex();
+
 
     const [form] = Form.useForm();
     const [requiredMark, setRequiredMarkType] = useState(true);
@@ -64,6 +66,7 @@ const NewRestaurantForm = () => {
                   image: 'https://www.medoc-atlantique.com/wp-content/uploads/2019/02/restaurant-1600x900.jpg'
               }))
               setErrorStatus(false)
+              
               if(errorStatus==false){
                 success(restaurantName);
               }

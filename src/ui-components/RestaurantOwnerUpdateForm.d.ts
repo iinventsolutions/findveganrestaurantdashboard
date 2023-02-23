@@ -21,6 +21,7 @@ export declare type RestaurantOwnerUpdateFormInputValues = {
     address?: string;
     dob?: string;
     planstatus?: string;
+    sub?: string;
 };
 export declare type RestaurantOwnerUpdateFormValidationValues = {
     firstname?: ValidationFunction<string>;
@@ -30,6 +31,7 @@ export declare type RestaurantOwnerUpdateFormValidationValues = {
     address?: ValidationFunction<string>;
     dob?: ValidationFunction<string>;
     planstatus?: ValidationFunction<string>;
+    sub?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type RestaurantOwnerUpdateFormOverridesProps = {
@@ -41,6 +43,7 @@ export declare type RestaurantOwnerUpdateFormOverridesProps = {
     address?: PrimitiveOverrideProps<TextFieldProps>;
     dob?: PrimitiveOverrideProps<TextFieldProps>;
     planstatus?: PrimitiveOverrideProps<SelectFieldProps>;
+    sub?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type RestaurantOwnerUpdateFormProps = React.PropsWithChildren<{
     overrides?: RestaurantOwnerUpdateFormOverridesProps | undefined | null;

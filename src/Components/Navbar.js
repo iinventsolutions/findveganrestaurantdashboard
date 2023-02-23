@@ -30,7 +30,7 @@ const Navbar = () => {
 
         <Profile>
             <Avatar sx={{ width: 32, height: 32 }} alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-            {restaurantOwner && <p>{restaurantOwner?.name}</p>}
+            {restaurantOwner && <p>{restaurantOwner?.firstname}</p>}
         </Profile>
     </ComponentWrapper>
   )

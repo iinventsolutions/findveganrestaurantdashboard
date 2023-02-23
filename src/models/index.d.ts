@@ -45,10 +45,10 @@ type UserMobileMetaData = {
 type EagerOrder = {
   readonly id: string;
   readonly status?: OrderStatus | keyof typeof OrderStatus | null;
+  readonly subtotal?: number | null;
   readonly OrderDishes?: (OrderDish | null)[] | null;
   readonly Restaurant?: Restaurant | null;
   readonly usermobileID: string;
-  readonly subtotal?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly orderRestaurantId?: string | null;
@@ -57,10 +57,10 @@ type EagerOrder = {
 type LazyOrder = {
   readonly id: string;
   readonly status?: OrderStatus | keyof typeof OrderStatus | null;
+  readonly subtotal?: number | null;
   readonly OrderDishes: AsyncCollection<OrderDish>;
   readonly Restaurant: AsyncItem<Restaurant | undefined>;
   readonly usermobileID: string;
-  readonly subtotal?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly orderRestaurantId?: string | null;
@@ -179,6 +179,7 @@ type EagerRestaurantOwner = {
   readonly address?: string | null;
   readonly dob?: string | null;
   readonly planstatus?: PlanSubscription | keyof typeof PlanSubscription | null;
+  readonly sub?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -192,6 +193,7 @@ type LazyRestaurantOwner = {
   readonly address?: string | null;
   readonly dob?: string | null;
   readonly planstatus?: PlanSubscription | keyof typeof PlanSubscription | null;
+  readonly sub?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

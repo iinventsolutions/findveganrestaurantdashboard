@@ -37,6 +37,7 @@ export default function RestaurantOwnerUpdateForm(props) {
     address: "",
     dob: "",
     planstatus: undefined,
+    sub: "",
   };
   const [firstname, setFirstname] = React.useState(initialValues.firstname);
   const [lastname, setLastname] = React.useState(initialValues.lastname);
@@ -45,6 +46,7 @@ export default function RestaurantOwnerUpdateForm(props) {
   const [address, setAddress] = React.useState(initialValues.address);
   const [dob, setDob] = React.useState(initialValues.dob);
   const [planstatus, setPlanstatus] = React.useState(initialValues.planstatus);
+  const [sub, setSub] = React.useState(initialValues.sub);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = restaurantOwnerRecord
@@ -57,6 +59,7 @@ export default function RestaurantOwnerUpdateForm(props) {
     setAddress(cleanValues.address);
     setDob(cleanValues.dob);
     setPlanstatus(cleanValues.planstatus);
+    setSub(cleanValues.sub);
     setErrors({});
   };
   const [restaurantOwnerRecord, setRestaurantOwnerRecord] =
@@ -79,6 +82,7 @@ export default function RestaurantOwnerUpdateForm(props) {
     address: [],
     dob: [],
     planstatus: [],
+    sub: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -112,6 +116,7 @@ export default function RestaurantOwnerUpdateForm(props) {
           address,
           dob,
           planstatus,
+          sub,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -174,6 +179,7 @@ export default function RestaurantOwnerUpdateForm(props) {
               address,
               dob,
               planstatus,
+              sub,
             };
             const result = onChange(modelFields);
             value = result?.firstname ?? value;
@@ -204,6 +210,7 @@ export default function RestaurantOwnerUpdateForm(props) {
               address,
               dob,
               planstatus,
+              sub,
             };
             const result = onChange(modelFields);
             value = result?.lastname ?? value;
@@ -234,6 +241,7 @@ export default function RestaurantOwnerUpdateForm(props) {
               address,
               dob,
               planstatus,
+              sub,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -264,6 +272,7 @@ export default function RestaurantOwnerUpdateForm(props) {
               address,
               dob,
               planstatus,
+              sub,
             };
             const result = onChange(modelFields);
             value = result?.phone ?? value;
@@ -294,6 +303,7 @@ export default function RestaurantOwnerUpdateForm(props) {
               address: value,
               dob,
               planstatus,
+              sub,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -325,6 +335,7 @@ export default function RestaurantOwnerUpdateForm(props) {
               address,
               dob: value,
               planstatus,
+              sub,
             };
             const result = onChange(modelFields);
             value = result?.dob ?? value;
@@ -355,6 +366,7 @@ export default function RestaurantOwnerUpdateForm(props) {
               address,
               dob,
               planstatus: value,
+              sub,
             };
             const result = onChange(modelFields);
             value = result?.planstatus ?? value;
@@ -385,6 +397,37 @@ export default function RestaurantOwnerUpdateForm(props) {
           {...getOverrideProps(overrides, "planstatusoption2")}
         ></option>
       </SelectField>
+      <TextField
+        label="Sub"
+        isRequired={false}
+        isReadOnly={false}
+        value={sub}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstname,
+              lastname,
+              email,
+              phone,
+              address,
+              dob,
+              planstatus,
+              sub: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.sub ?? value;
+          }
+          if (errors.sub?.hasError) {
+            runValidationTasks("sub", value);
+          }
+          setSub(value);
+        }}
+        onBlur={() => runValidationTasks("sub", sub)}
+        errorMessage={errors.sub?.errorMessage}
+        hasError={errors.sub?.hasError}
+        {...getOverrideProps(overrides, "sub")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

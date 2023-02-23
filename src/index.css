@@ -126,6 +126,10 @@ code {
     font-family: "Roboto", sans-serif;
   }
 
+  .MuiDataGrid-columnHeaders.css-z8fhq1-MuiDataGrid-columnHeaders{
+    background-color: #F8A94C;
+  }
+
 
 
 /* .MenuTab:focus p{
