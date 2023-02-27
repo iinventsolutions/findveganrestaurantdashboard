@@ -7,6 +7,7 @@ import { InboxOutlined, UploadOutlined } from '@ant-design/icons';
 import { DataStore } from 'aws-amplify';
 import { Restaurant } from '../models';
 import { useRestaurantContex } from '../Contexts/RestaurantContext';
+import { GOOGLE_API_KEY } from '../Utils/Constants';
 
 
 
@@ -139,7 +140,7 @@ const NewRestaurantForm = () => {
 
             <Form.Item label="Location" required tooltip="This is a required field">
                 <GooglePlacesAutocomplete
-                    apiKey="AIzaSyB-LKht_lArgYnXm8ofVkCzPLZ0BlXwLnU"
+                    apiKey={GOOGLE_API_KEY}
                     selectProps={{
                         value: location,
                         onChange: getAddressLatLng
