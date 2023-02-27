@@ -4,6 +4,7 @@ import MenuItem from '../Components/MenuItem'
 import { DataStore } from 'aws-amplify'
 import { Dish } from '../models'
 import { useRestaurantContex } from '../Contexts/RestaurantContext'
+import MenuItemTwo from '../Components/MenuItemTwo'
 
 
 const Menu = () => {
@@ -22,18 +23,7 @@ const Menu = () => {
   return (
     <ComponentWrapper>
       {dishes?.map(dishItem => <MenuItem key={dishItem?.id} data={dishItem}/>)}
-      {/* <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem /> */}
+      {/* <MenuItemTwo /> */}
     </ComponentWrapper>
   )
 }

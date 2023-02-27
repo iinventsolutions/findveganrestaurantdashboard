@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { DataStore } from 'aws-amplify' 
 import { Restaurant, Dish } from '../models/index';
-import Grid from '@mui/material/Grid';
+import {Grid, Paper} from '@mui/material';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { NewResButton } from './Dashboard';
@@ -58,18 +59,18 @@ const Settings = () => {
 
 
       <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} direction='column'>
-        <Grid item style={{backgroundColor: 'blue'}} xs={8}>
-          <p>xs=8</p>
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} direction='row' >
+        <Grid item xs={8} sm={3}>
+          <Paper style={{height: '200px', width: '300px'}}>xs=8</Paper>
         </Grid>
-        <Grid style={{backgroundColor: 'red'}} item xs={4}>
-          <p>xs=4</p>
+        <Grid item xs={4} sm={3}>
+          <Paper style={{height: '200px', width: '300px'}}>xs=4</Paper>
         </Grid>
-        <Grid style={{backgroundColor: 'yellow'}} item xs={4}>
-          <p>xs=4</p>
+        <Grid item xs={4} sm={3}>
+          <Paper style={{height: '200px', width: '300px'}}>xs=4</Paper>
         </Grid>
-        <Grid style={{backgroundColor: 'black'}} item xs={8}>
-          <p>xs=8</p>
+        <Grid item xs={8} sm={3}>
+          <Paper style={{height: '200px', width: '300px'}}>xs=8</Paper>
         </Grid>
       </Grid>
     </Box>
@@ -84,3 +85,9 @@ const Settings = () => {
 }
 
 export default Settings
+
+const Try = styled.div`
+  display: flex;
+  height: 200px;
+  width: 100px;
+`

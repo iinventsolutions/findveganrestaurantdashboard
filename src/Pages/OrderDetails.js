@@ -62,7 +62,7 @@ const OrderDetails = () => {
       description: 'The total price.',
       type: 'number',
       sortable: false,
-      width: 160,
+      width: 120,
       valueGetter: (params) => params.row.quantity * params.row?.dish?.price.toFixed(2),
     },
   ];
@@ -134,7 +134,7 @@ const OrderDetails = () => {
   const CircularProgressWithLabel = (props) => {
     return (
       <div style={{ position: 'relative' }}>
-        <CustomCircularProgress variant="determinate" {...props} />
+        <CustomCircularProgress  size={60} variant="determinate" {...props} />
         <Typography
           variant="caption"
           component="div"
@@ -148,29 +148,13 @@ const OrderDetails = () => {
       </div>
     );
   };
-  
-  
-  // console.log("Order Dishes Kings Grill: ", orderDishes)
 
 
-  // useEffect(() => {
-  //   // getOrder();
-  //   getUserDetails();
-  // }, [id])
-
-  // const food = orderDetails?.orderDishes
   
-  // console.log("The details: ",orderDetails[0]?.orderDishes?.values?.quantity)
   return (
     <div>
-      {/* <p>Customer Name: {customerDetails?.name}</p>
-      <p>Address: {customerDetails?.address}</p>
 
-      {orderDishes?.map(orderitem =>( 
-        <p key={orderitem?.dish?.id}>{orderitem?.dish?.name} x {orderitem?.quantity}</p>
-      ))}
-
-      <p>Total: {orderDetails?.subtotal?.toFixed(2)}</p> */}
+      {/* <p>Total: {orderDetails?.subtotal?.toFixed(2)}</p>  */}
       <MyContainer>
         <Grid container sx={{height: '100%', width: '100%'}} spacing={2}>
             <Stack 
@@ -187,7 +171,7 @@ const OrderDetails = () => {
                     sx={{ width: 86, height: 86, mb: 3 }}
                     variant="rounded"
                   />
-                  <Typography variant='p' component='h3' sx={{fontSize: '18px'}}>Lawrence Darko</Typography>
+                  <Typography variant='p' component='h3' sx={{fontSize: '18px'}}>{customerDetails?.name}</Typography>
                   <Box sx={{width: '90px', height: '45px', border: '2px solid #98DA98', borderRadius: 2, justifyContent: 'center', alignItems: 'center', display: 'flex', mt: 2}}>
                     <Typography sx={{color: '#98DA98'}}>Customer</Typography>
                   </Box>
@@ -200,7 +184,7 @@ const OrderDetails = () => {
               <Paper sx={{height: '10vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between', width: '55%', alignItems: 'center'}}>
                     <LocationOnOutlinedIcon />
-                    <Typography>Johnny St. Spintex</Typography>
+                    <Typography>{customerDetails?.address}</Typography>
                 </Box>
               </Paper>
               <Paper sx={{width: '100%', height: '40vh'}}>
@@ -222,27 +206,32 @@ const OrderDetails = () => {
                         // loading={orderDishes?.rows.length === 0}
                         columns={columns}
                         pageSize={6}
-                        rowsPerPageOptions={[5]}
+                        rowsPerPageOptions={[6]}
                         checkboxSelection={false}
                         disableSelectionOnClick
                         // components={{ Toolbar: StyledGridToolbar }}
+                        // getRowId={getRowId}
                         experimentalFeatures={{ newEditingApi: true }}
                       />
                     </Box>
               {/* </Paper> */}
               <Stack spacing={4} direction='row' sx={{height: '35vh', justifyContent: 'space-between'}}>
-                <Paper sx={{width: '400px', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                  <img src='/images/mymap.png' height="90%" width="95%" objectFit="cover"/>
+                <Paper sx={{width: '40%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                  <img src='/images/mymap.png' height="90%" width="95%" objectfit="cover"/>
                 </Paper>
-                <Paper sx={{width: '400px', height: '100%', }}>
+                <Paper sx={{width: '20%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                  <Typography>Dish(s) Total</Typography>
+                  <Typography variant='h5' component="h1">{orderDetails?.subtotal?.toFixed(2)}</Typography>
+                </Paper>
+                <Paper sx={{width: '40%', height: '100%', }}>
                   <Typography variant='p' component='h4' mt={1}>Customer Favourite </Typography>
                   <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '60%', width: '100%', border: '1px solid #fff', padding: '0px 80px'}} mt={4}>
                     <Box>
-                    <CircularProgressWithLabel value={75} />
+                    <CircularProgressWithLabel style={{color: 'red'}} value={65} />
                       <Typography>Food</Typography>
                     </Box>
                     <Box>
-                    <CircularProgressWithLabel value={25} />
+                    <CircularProgressWithLabel style={{color: 'orange'}} value={35} />
                       <Typography>Drink</Typography>
                     </Box>
                   </Box>

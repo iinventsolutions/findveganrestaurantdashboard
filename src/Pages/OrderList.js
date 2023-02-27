@@ -101,23 +101,6 @@ const OrderList = () => {
           </div>
       </OrderStatus>
       <OrderListWrapper>
-        {/* <OrderListHeader>
-            <p>Order ID</p>
-            <p>Date</p>
-            <p>Customer Name</p>
-            <p>Amount</p>
-            <p>Status</p>
-            <p>Payment</p>
-            <p>Time</p>
-        </OrderListHeader>
-        <OrderListBody>
-            <OrderListItem />
-            <OrderListItem />
-            <OrderListItem />
-            <OrderListItem />
-            <OrderListItem />
-            <OrderListItem />
-        </OrderListBody> */}
         <Table orderData={orders}/>
       </OrderListWrapper>
       {/* </Grid> */}

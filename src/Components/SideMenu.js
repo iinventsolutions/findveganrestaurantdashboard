@@ -94,7 +94,7 @@ const SideMenu = ({signOut}) => {
 
   return (
     <>
-    {restaurant && <h4>{restaurant.name}</h4>}
+    {/* {restaurant && <h4>{restaurant.name}</h4>} */}
     <Menu onClick={onClickedMenuItem} style={{marginTop: 20, display: 'flex', gap: 5, flexDirection: 'column', backgroundColor: '#F8A94C', color: '#fff', fontWeight: 500, fontFamily: "Roboto", cursor: 'pointer'}} items={menuItems} />
     {contextHolder}
     </>

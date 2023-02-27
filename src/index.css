@@ -130,6 +130,58 @@ code {
     background-color: #F8A94C;
   }
 
+  .custom-header-cell{
+    width: 200px;
+  }
+
+  .custom-header-cell {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 200px; /* change the value to adjust the maximum width */
+  }
+
+  /* .MuiDataGrid-colCellTitle {
+    padding-right: 8px;
+  } */
+
+  .deleteDishbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    width: 70px;
+    border: 1px solid #ababab;
+    border-radius: 5px;
+  }
+
+  .deleteDishbtn:hover{
+    color: #2C87FF;
+    /* background-color: #2C87FF; */
+    border: 1px solid #2C87FF;
+  }
+
+  .MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeSmall.MuiButton-textSizeSmall.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeSmall.MuiButton-textSizeSmall.css-1knaqv7-MuiButtonBase-root-MuiButton-root{
+    color: #616161;
+  }
+
+  .MuiDataGrid-toolbarContainer.css-1j9kmqg-MuiDataGrid-toolbarContainer {
+    /* border: 1px solid #fff; */
+  }
+
+  .MuiDataGrid-columnHeaderTitle.css-1jbbcbn-MuiDataGrid-columnHeaderTitle {
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiDataGrid-iconSeparator.css-i4bv87-MuiSvgIcon-root{
+    display: none !important;
+  }
+  
+  
+  
+  
+  
 
 
 /* .MenuTab:focus p{

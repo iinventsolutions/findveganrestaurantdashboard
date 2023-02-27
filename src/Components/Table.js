@@ -1,17 +1,23 @@
 import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
 import { Space, Table, Tag } from 'antd';
 import { DataStore } from 'aws-amplify';
 import { UserMobile, Order } from '../models';
 import { useNavigate } from 'react-router-dom';
 import { useRestaurantContex } from '../Contexts/RestaurantContext';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Box } from '@mui/material';
+// import format from 'date-fns/format';
 
 
 
 const TableAnt = () => { 
 
+ 
+
   const { restaurant } = useRestaurantContex();
 
-  const [orders, setOrders] = useState()
+  const [orders, setOrders] = useState({})
 
   const navigate = useNavigate();
   const [customerNames, setCustomerNames] = useState({})
@@ -45,7 +51,7 @@ const TableAnt = () => {
     else if(status === "DELIVERED"){
       return <Tag color='green'>{status}</Tag>
     }
-    else if(status === "DECLINED"){
+    else if(status === "RESTAURANT_DECLINED"){
       return <Tag color='red'>{status}</Tag>
     }
     else if(status === "ACCEPTED"){
@@ -96,114 +102,179 @@ const TableAnt = () => {
         }));
       });
     }
+    console.log('all customer names: ', customerNames)
     return <p>{customerNames[customerId]?.toUpperCase()}</p>;
   };
 
+  const changeOrderStatus = async(id, thestate) => { 
+    let btnState = thestate
+    const orderState = await DataStore.query(Order, id);
+    await DataStore.save(
+      Order.copyOf(orderState, updated => {
+        updated.status = btnState
+      })
+    ); 
+
+    navigate(-1)
+   }
+
+// const columns = [
+//   {
+//     title: 'OrderID',
+//     dataIndex: 'id',
+//     key: 'id',
+//     className: 'custom-header-cell',
+//     render: (text) => <a>{text}</a>,
+//   },
+//   {
+//     title: 'Date and Time',
+//     dataIndex: 'createdAt',
+//     key: 'createdAt',
+//     render: convertDate
+//   },
+//   {
+//     title: 'Customer Name',
+//     dataIndex: 'usermobileID',
+//     key: 'usermobileID',
+//     render: getCustomerName
+//   },
+//   {
+//     title: 'Amount',
+//     dataIndex: 'subtotal',
+//     key: 'subtotal',
+//     render: (amount) => <p>GHS {amount}</p>
+//   },
+//   {
+//     title: 'Status',
+//     key: 'status',
+//     dataIndex: 'status',
+//     render: orderStatus,
+//   },
+//   {
+//     title: 'Payment',
+//     dataIndex: 'payment',
+//     key: 'payment',
+//   },
+//   // {
+//   //   title: 'Time',
+//   //   dataIndex: 'time',
+//   //   key: convertTime,
+//   // },
+//   {
+//     title: 'Action',
+//     key: 'action',
+//     render: (_, record) => (
+//       <Space size="middle">
+//         <a>Accept {record.customename}</a>
+//         <a>Decline</a>
+//       </Space>
+//     ),
+//   },
+// ];
+
+// For mui
 
 const columns = [
   {
-    title: 'OrderID',
-    dataIndex: 'id',
-    key: 'id',
-    render: (text) => <a>{text}</a>,
+    field: 'id',
+    headerName: 'OrderID',
+    renderCell: (params) => <a>#{params.value}</a>,
+    sortable: false,
+    // flex: 1,
   },
   {
-    title: 'Date and Time',
-    dataIndex: 'createdAt',
-    key: 'createdAt',
-    render: convertDate
+    field: 'createdAt',
+    headerName: 'Date and Time',
+    type: 'dateTime',
+    renderCell: (params) => convertDate(params.value),
+    // valueFormatter: (params) => format(new Date(params.value), 'yyyy-MM-dd hh:mm a'),
+    sortable: false,
+    flex: 2,
   },
   {
-    title: 'Customer Name',
-    dataIndex: 'usermobileID',
-    key: 'usermobileID',
-    render: getCustomerName
+    field: 'usermobileID',
+    headerName: 'Customer Name',
+    renderCell: (params) => getCustomerName(params.value),
+    sortable: false,
+    flex: 1.5,
   },
   {
-    title: 'Amount',
-    dataIndex: 'subtotal',
-    key: 'subtotal',
-    render: (amount) => <p>GHS {amount}</p>
+    field: 'subtotal',
+    headerName: 'Amount',
+    type: 'number',
+    renderCell: (params) => <p>GHS {params.value}</p>,
+    align: "left",
+    headerAlign: "left",
+    sortable: true,
+    flex: 1,
   },
   {
-    title: 'Status',
-    key: 'status',
-    dataIndex: 'status',
-    render: orderStatus,
+    field: 'status',
+    headerName: 'Status',
+    renderCell: (params) => orderStatus(params.value),
+    sortable: true,
+    flex: 1.5,
   },
   {
-    title: 'Payment',
-    dataIndex: 'payment',
-    key: 'payment',
+    field: 'payment',
+    headerName: 'Payment',
+    sortable: false,
+    flex: 1.5,
+    renderCell: (params) => (
+      <MomoLabel>
+        <h5>Mobile money</h5>
+      </MomoLabel>
+    ),
   },
-  // {
-  //   title: 'Time',
-  //   dataIndex: 'time',
-  //   key: convertTime,
-  // },
   {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
+    field: 'action',
+    headerName: 'Action',
+    renderCell: (params) => (
       <Space size="middle">
-        <a>Invite {record.customename}</a>
-        <a>Delete</a>
+      <a onClick={(event) => {
+        event.preventDefault();
+        changeOrderStatus(params?.row?.id, 'ACCEPTED' );
+        }}>Accept</a>
+      <a onClick={(event) => {
+        event.preventDefault();
+        changeOrderStatus(params?.row?.id, 'RESTAURANT_DECLINED' );
+        }}>Decline</a>
       </Space>
     ),
+    sortable: false,
+    flex: 1.5,
   },
 ];
 
-const data = [
-  {
-    key: '1',
-    orderid: '#55555',
-    date: '26 March 2020',
-    subtotal: 120,
-    customername: 'Baah Lawrence Darko',
-    age: 32,
-    payment: 'Cash',
-    status: 'Accepted',
-    time: '12:28',
-    // address: 'New York No. 1 Lake Park',
-    // tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    orderid: '#55556',
-    date: '26 March 2020',
-    subtotal: 120,
-    customername: 'Jim Green',
-    age: 42,
-    payment: 'Mobile Money',
-    status: 'Delivered',
-    time: '12:28',
-    // address: 'London No. 1 Lake Park',
-    // tags: ['loser'],
-  },
-  {
-    key: '3',
-    orderid: '#55557',
-    date: '26 March 2020',
-    subtotal: 120,
-    customername: 'Joe Black',
-    age: 32,
-    payment: 'Cash',
-    status: 'Declined',
-    time: '12:28',
-    // address: 'Sydney No. 1 Lake Park',
-    // tags: ['cool', 'teacher'],
-  },
-];
+
+console.log("the rows object is: ", orders)
 
 
   return(
-    <Table 
-        onRow= {(orderObj)=>({
-            onClick: () => navigate(orderObj.id)
-        })}
-        columns={columns} 
-        dataSource={orders} 
-        rowKey='id' />
+    // <Table 
+    //     onRow= {(orderObj)=>({
+    //         onClick: () => navigate(orderObj.id)
+    //     })}
+    //     columns={columns} 
+    //     dataSource={orders} 
+    //     rowKey='id' />
+
+    <Box sx={{ height: 450, width: '100%' }}>
+          <DataGrid
+            rows={orders}
+            // loading={orderDishes?.rows.length === 0}
+            columns={columns}
+            pageSize={6}
+            rowsPerPageOptions={[6]}
+            checkboxSelection={true}
+            disableSelectionOnClick
+            components={{ Toolbar: GridToolbar }}
+            // getRowId={getRowId}
+            onCellDoubleClick={()=>{}}
+            onRowClick={(row) => {navigate(row.id)}}
+            experimentalFeatures={{ newEditingApi: true }}
+          />
+        </Box>
   )
 
  }
@@ -211,3 +282,13 @@ const data = [
 // const TableAnt = () => <Table onClick={handleClick} columns={columns} dataSource={data} />;
 
 export default TableAnt
+
+const MomoLabel = styled.div`
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #2FA94E;
+  
+  >h5{
+    color: #fff;
+  }
+`

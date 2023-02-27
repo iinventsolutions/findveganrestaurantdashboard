@@ -43,14 +43,17 @@ export const RestaurantOwnerContextProvider = ({children}) => {
 
     const checkExistingUsers = async () => { 
         try {
+
           const existingRecord = await DataStore.query(RestaurantOwner, (er)=> er.sub.eq(sub));
           if (existingRecord === null || existingRecord === undefined) {
             setCheckOwnerExistence(null);
           } else if (existingRecord.length > 0) {
             setCheckOwnerExistence(false);
+            console.log("in the if block ",existingRecord.length)
           } else {
             console.log('existingRec', existingRecord)
             // setTimeout(() => {
+              console.log("in the else block ",existingRecord.length)
                 setCheckOwnerExistence(true);
             //   }, 1000);
           }
@@ -62,7 +65,9 @@ export const RestaurantOwnerContextProvider = ({children}) => {
       
       
     useEffect(() => {
+      if(sub){
         checkExistingUsers()
+      }
     }, [sub])
     
 

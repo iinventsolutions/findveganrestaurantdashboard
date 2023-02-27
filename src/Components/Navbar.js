@@ -3,11 +3,13 @@ import styled from 'styled-components'
 import SearchIcon from '@material-ui/icons/Search';
 import Avatar from '@mui/material/Avatar';
 import { useRestaurantOwnerContext } from '../Contexts/RestaurantOwnerContext';
+import { useRestaurantContex } from '../Contexts/RestaurantContext';
 // import Title from 'antd/es/skeleton/Title';
 
 const Navbar = () => {
 
     const { restaurantOwner } = useRestaurantOwnerContext();
+    const { restaurant } = useRestaurantContex();
 
     console.log("res owner info: ", restaurantOwner)
 
@@ -15,7 +17,7 @@ const Navbar = () => {
     <ComponentWrapper>
         {/* <div> */}
         <Title>
-            <h4>Overview</h4>
+        {restaurant && <h4>{restaurant.name}</h4>}
         </Title>
             
         {/* </div> */}
