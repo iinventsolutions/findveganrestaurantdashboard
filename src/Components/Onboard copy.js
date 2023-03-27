@@ -1,82 +1,50 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import { Form, Wrapper, Terms } from '../style/Form.styled';
-import ClaimButton from './ClaimButton';
-import InputField from './InputField';
-import { inputData } from '../data';
-import PaymentPlan from './PaymentPlan';
+import React, {useState} from 'react'
+import styled from 'styled-components'
+import { Form, Wrapper, Terms } from '../style/Form.styled'
+import ClaimButton from './ClaimButton'
+import InputField from './InputField'
+import { inputData } from '../data'
+import PaymentPlan from './PaymentPlan'
 import { useOrderContext } from '../Contexts/OrderContex';
-import { Link } from 'react-router-dom';
-import CustomInput from './CustomInput';
-import { useForm } from "react-hook-form";
-import { Auth, DataStore } from 'aws-amplify';
-import { RestaurantOwner } from '../models';
-import { useNavigate } from 'react-router-dom';
-import { useAuthContex } from '../Contexts/AuthContext';
+import { Link } from 'react-router-dom'
 
-const Onboard = () => {
+const Onboard = ({onDismiss}) => {
 
-  const navigate = useNavigate();
-  const { setVerificationEmail } = useAuthContex();
+  const {setcheckLogin, checkLogin} = useOrderContext()
 
-  const { control, handleSubmit, watch } = useForm();
-  const [loading, setLoading] = useState(false)
-  const [errorMsg, setErrorMsg] = useState(null)
+  const [formData, setFormData] = useState({
+    firstname: '',
+    lastname: '',
+    email: '',
+    dob: '',
+    phone: '',
+    address: '',
 
-  const onSubmit = async(data) => {
-    // console.log(data);
-    if(loading){
-      return
-    }
+})
 
-    setLoading(true)
-    // navigation.navigate('ConfirmEmail', {userEmail: data.email});
-    const {fullname, username, email, password, phone, address, dob} = data
-    try {
-      const {userSub} = await Auth.signUp({
-        username: email,
-        password,
-        attributes: {
-          email,
-          phone_number: phone,
-          name: fullname,
-          preferred_username: username
-        },
-        autoSignIn: { // optional - enables auto sign in after user is confirmed
-          enabled: true,
-        }
-      })
-      
-      if(userSub){
-        await DataStore.save(new RestaurantOwner({
-          fullname,
-          username,
-          email,
-          phone,
-          address,
-          dob,
-          sub: userSub
-        }))
-      } else{
-        setErrorMsg(new Error("User id not ready! Retry!"));
-      }
-      // setDbUser(user)
-      navigate(`/confirm-email`, {replace: true})
-      setVerificationEmail(email)
-    } catch (error) {
-      // alert(error.message)
-      setErrorMsg(error.message)
-    }
-
-    setLoading(false)
-  }
+  const [showPlansection, setShowPlansection] = useState(false)
 
 
+// onSubmit Handler Function
+const submitHandler = (e) => {
+    e.preventDefault()
+    setShowPlansection(true)
+    // alert('free trial claimed')
+}
+
+//onChange Handler Function
+const changeHandler = (e) => {
+    setFormData({...formData, [e.target.name]: e.target.value})
+}
 
   return (
     <PageWrapper>
+      {/* <Plan> */}
+          {showPlansection && <PaymentPlan onDismiss={onDismiss} setShowPlansection={setShowPlansection} registrationInfo={formData}/>}
+      {/* </Plan> */}
     <ComponentWrapper>
         <SidePage>
+          <p onClick={()=>setcheckLogin(!checkLogin)}>Login</p>
           <Logo>
               <img src="/images/signlogo.png" alt="logo" />
           </Logo>
@@ -89,50 +57,22 @@ const Onboard = () => {
           <TitleWrapper style={{ width: '400px' }}>
             <img src='/images/reviews.png' height='40px'width='250px' alt='reviews' />
           </TitleWrapper>
-
+          
+            {/* <div onClick={onDismiss}>
+            Got it!
+          </div> */}
         </SidePage>
         <ImageWrapper>
             <img src="/images/signuparrow.png"  alt="onboard" />
         </ImageWrapper>
         <MainPage>
-        <Form gap={20} onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={submitHandler}>
           <p>Create an account</p>
-          {inputData.map(item => {
-              // Define the validation rules object
-              const rules = {
-                required: `${item.errMsg}`,
-                minLength: {
-                  value: item?.length,
-                  message: item?.lengthErrMsg
-                },
-                pattern: {
-                  value: item.pattern,
-                  message: item.errMsg
-                }
-              };
-
-              // If the item has a 'validate' property that is true, add the 'validate' rule
-              if (item?.validate === true) {
-                rules.validate = value => value === watch('password') || 'Password does not match';
-              }
-
-              return (
-                <CustomInput
-                  inputHeight={30}
-                  key={item.id}
-                  id={item.id}         
-                  name={item.name}
-                  placeholder={item.placeholder}
-                  type={item.type}
-                  control={control}
-                  defaultValue=""
-                  rules={rules}
-                />
-              );
+            {inputData.map(input => {
+                return <InputField key={input.id} {...input} value={formData[input.name]} onChange={changeHandler}/>            
             })}
             <Wrapper>
-            {errorMsg && <p style={{color: 'red', fontStyle: 'italic', fontSize: 14, marginBottom: 8}}>{errorMsg}</p>}
-                <ClaimButton title={loading? 'Registering...':'Sign up'}/>
+                <ClaimButton title={'Sign up'}/>
                 <Terms>By clicking the button, you are agreeing to our <span>Terms and Services</span></Terms>
                 <Link to="/login" style={{color: '#BAB7D4', fontSize: '14px', cursor: 'pointer'}}>Already have an account? Login</Link>
             </Wrapper>
@@ -151,7 +91,6 @@ const ComponentWrapper = styled.div`
     height: 100vh;
     width: 100vw;
     background-color: #ffffff;
-    /* overflow: scroll; */
 
 
     @media only screen and (max-width: 600px) {

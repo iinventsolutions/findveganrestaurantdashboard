@@ -15,15 +15,45 @@ import OrderListItem from '../Components/OrderListItem';
 import { DataStore } from 'aws-amplify';
 import { Order } from '../models';
 import { Grid } from '@material-ui/core';
+import { OrderDish } from '../models';
 import Table from '../Components/Table';
 import { useRestaurantContex } from '../Contexts/RestaurantContext';
+import { useOrderContext } from '../Contexts/OrderContex';
+import { Box } from '@mui/material';
 
 
 const OrderList = () => {
 
   const { restaurant } = useRestaurantContex();
+  const { clickedOrderId } = useOrderContext();
 
   const [orders, setOrders] = useState()
+  const [orderDishes, setOrderDishes] = useState()
+
+  // Operations to get order details
+  async function getOrderDishes() {
+    const allOrderDishes = await DataStore.query(OrderDish, od => od.orderID.eq(clickedOrderId), {
+      include: {
+        dish: true // include the "Dish" model in the result set
+      }
+    });
+    // console.log(allOrderDishes);
+  
+    // Iterate over each OrderDish object and wait for its "dish" property to resolve
+    const orderDishesWithDish = await Promise.all(allOrderDishes?.map(async (od) => {
+      const dish = await od.Dish;
+      return { ...od, dish };
+    }));
+    
+    setOrderDishes(orderDishesWithDish);
+    console.log("Order Dishes Kings Grill: ",orderDishesWithDish);
+  }
+
+  useEffect(() => {
+    getOrderDishes()
+  }, [clickedOrderId])
+  
+  // Operations to get order details ends
 
   useEffect(() => {
     if(!restaurant?.id){
@@ -32,16 +62,37 @@ const OrderList = () => {
     console.log("restaurant id is: ",restaurant?.id)
     DataStore.query(Order, (o)=> o.orderRestaurantId.eq(restaurant?.id)).then(setOrders)
     // window.location.reload()
+  }, [restaurant])
+
+  useEffect(() => {
+    try {
+      const subscription = DataStore.observe(Order).subscribe(msg => {
+        // console.log('Model:', msg.model.name, 'Operation:', msg.opType, 'Element:', msg.element);
+        if(msg.opType === 'INSERT' || msg.opType === 'UPDATE'){
+          console.log(msg.opType)
+        }
+      });
+      return () => subscription.unsubscribe();
+    } catch (error) {
+      console.error('Error observing orders:', error);
+    }
   }, [])
+  
+
+  if(!orderDishes){
+    return null
+  }
+
 
   console.log(orders)
+  console.log("ORDER DISHES FROM LIST: ", orderDishes)
+  console.log("Clicked order id: ", clickedOrderId)
   
 
 
   return (
     <ComponentWrapper>
-      {/* <Grid container> */}
-      <Header>
+      {/* <Header>
         <LineOne>
           <p>Orders</p>
           <HeaderButtons>
@@ -67,11 +118,9 @@ const OrderList = () => {
               <input type="text" placeholder="Search by orders parameters..." />
           </HeaderSearch>
           <HeaderSearch className='searchStyle'>
-              {/* <CalendarMonthIcon style={{fontSize: 15}}/> */}
               <input type="date" placeholder="Date Start" />
           </HeaderSearch>
           <HeaderSearch className='searchStyle'>
-              {/* <CalendarMonthIcon style={{fontSize: 15}}/> */}
               <input type="date"  placeholder="Date End" />
           </HeaderSearch>
           <HeaderSearch className='searchStyle'>
@@ -84,9 +133,9 @@ const OrderList = () => {
           <OrderState title='PICKUPS' icon={<ForwardIcon style={{ fontSize: '18px' }}/>} number={31}/>
           <OrderState title='RETURNS' icon={<ForwardIcon className='icStyle' style={{ fontSize: '18px' }}/>} number={30}/>
         </LineThree>
-      </Header>
+      </Header> */}
 
-      <OrderStatus>
+      {/* <OrderStatus>
           <div tabindex="1">
             <p>All Status</p>
           </div>
@@ -99,11 +148,35 @@ const OrderList = () => {
           <div tabindex="4">
             <p>Delivered</p>
           </div>
-      </OrderStatus>
+      </OrderStatus> */}
+      <Header>
+        <ArrowDown>
+        </ArrowDown>
+
+        {!clickedOrderId ? 'Click on a dish to display detals' : <table style={{width: '60%', paddingBottom: '20px'}}>
+          <thead style={{width: '70%'}}>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+          {orderDishes?.map((dishItem) => (<tr>
+              <td>{dishItem?.dish?.name}</td>
+              <td>{dishItem.quantity}</td>
+              <td>{dishItem.dish.price}</td>
+              <td>{dishItem.quantity*dishItem.dish.price}</td>
+              {/* <td>{dishItem.subtotal}</td> */}
+            </tr>))}
+          </tbody>
+        </table>}
+        
+      </Header>
       <OrderListWrapper>
         <Table orderData={orders}/>
       </OrderListWrapper>
-      {/* </Grid> */}
     </ComponentWrapper>
   )
 }
@@ -122,8 +195,49 @@ const Header = styled.div`
   align-items: center;
   /* border: 1px solid red; */
   height: 150px;
-  background-color: #F4F4F4;
+  background-color: #D2D2D2;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: scroll;
+  box-shadow: rgb(157, 157, 157) 3px 3px 8px 3px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+
+
+
+  scrollbar-width: none;
+
+::-webkit-scrollbar {
+      display: none;
+  }
 `
+const ArrowDown = styled.div`
+  /* margin-top: 0px; */
+  /* display: flex; */
+  background-color: #fff;
+  width: 60px;
+  z-index: 0;
+  height: 25px;
+  -webkit-clip-path: polygon(50% 100%, 0 0, 99% 0);
+  clip-path: polygon(50% 100%, 0 0, 99% 0);
+
+  box-shadow: rgb(157, 157, 157) 2px 2px 6px 2px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+`
+const SubHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px 20px;
+  align-items: center;
+  width: 70%;
+  height: 40px;
+  background-color: #B3B3B3;
+  /* border: 1px solid red; */
+
+  >p{
+    text-align: left;
+    color: #fff;
+  }
+`
+
 const HeaderButtons = styled.div`
   display: flex;
   align-items: center;

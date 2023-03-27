@@ -30,8 +30,8 @@ export default function RestaurantOwnerUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    firstname: "",
-    lastname: "",
+    fullname: "",
+    username: "",
     email: "",
     phone: "",
     address: "",
@@ -39,8 +39,8 @@ export default function RestaurantOwnerUpdateForm(props) {
     planstatus: undefined,
     sub: "",
   };
-  const [firstname, setFirstname] = React.useState(initialValues.firstname);
-  const [lastname, setLastname] = React.useState(initialValues.lastname);
+  const [fullname, setFullname] = React.useState(initialValues.fullname);
+  const [username, setUsername] = React.useState(initialValues.username);
   const [email, setEmail] = React.useState(initialValues.email);
   const [phone, setPhone] = React.useState(initialValues.phone);
   const [address, setAddress] = React.useState(initialValues.address);
@@ -52,8 +52,8 @@ export default function RestaurantOwnerUpdateForm(props) {
     const cleanValues = restaurantOwnerRecord
       ? { ...initialValues, ...restaurantOwnerRecord }
       : initialValues;
-    setFirstname(cleanValues.firstname);
-    setLastname(cleanValues.lastname);
+    setFullname(cleanValues.fullname);
+    setUsername(cleanValues.username);
     setEmail(cleanValues.email);
     setPhone(cleanValues.phone);
     setAddress(cleanValues.address);
@@ -75,8 +75,8 @@ export default function RestaurantOwnerUpdateForm(props) {
   }, [idProp, restaurantOwner]);
   React.useEffect(resetStateValues, [restaurantOwnerRecord]);
   const validations = {
-    firstname: [{ type: "Required" }],
-    lastname: [{ type: "Required" }],
+    fullname: [{ type: "Required" }],
+    username: [{ type: "Required" }],
     email: [{ type: "Required" }],
     phone: [],
     address: [],
@@ -109,8 +109,8 @@ export default function RestaurantOwnerUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          firstname,
-          lastname,
+          fullname,
+          username,
           email,
           phone,
           address,
@@ -164,16 +164,16 @@ export default function RestaurantOwnerUpdateForm(props) {
       {...rest}
     >
       <TextField
-        label="Firstname"
+        label="Fullname"
         isRequired={true}
         isReadOnly={false}
-        value={firstname}
+        value={fullname}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstname: value,
-              lastname,
+              fullname: value,
+              username,
               email,
               phone,
               address,
@@ -182,29 +182,29 @@ export default function RestaurantOwnerUpdateForm(props) {
               sub,
             };
             const result = onChange(modelFields);
-            value = result?.firstname ?? value;
+            value = result?.fullname ?? value;
           }
-          if (errors.firstname?.hasError) {
-            runValidationTasks("firstname", value);
+          if (errors.fullname?.hasError) {
+            runValidationTasks("fullname", value);
           }
-          setFirstname(value);
+          setFullname(value);
         }}
-        onBlur={() => runValidationTasks("firstname", firstname)}
-        errorMessage={errors.firstname?.errorMessage}
-        hasError={errors.firstname?.hasError}
-        {...getOverrideProps(overrides, "firstname")}
+        onBlur={() => runValidationTasks("fullname", fullname)}
+        errorMessage={errors.fullname?.errorMessage}
+        hasError={errors.fullname?.hasError}
+        {...getOverrideProps(overrides, "fullname")}
       ></TextField>
       <TextField
-        label="Lastname"
+        label="Username"
         isRequired={true}
         isReadOnly={false}
-        value={lastname}
+        value={username}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstname,
-              lastname: value,
+              fullname,
+              username: value,
               email,
               phone,
               address,
@@ -213,17 +213,17 @@ export default function RestaurantOwnerUpdateForm(props) {
               sub,
             };
             const result = onChange(modelFields);
-            value = result?.lastname ?? value;
+            value = result?.username ?? value;
           }
-          if (errors.lastname?.hasError) {
-            runValidationTasks("lastname", value);
+          if (errors.username?.hasError) {
+            runValidationTasks("username", value);
           }
-          setLastname(value);
+          setUsername(value);
         }}
-        onBlur={() => runValidationTasks("lastname", lastname)}
-        errorMessage={errors.lastname?.errorMessage}
-        hasError={errors.lastname?.hasError}
-        {...getOverrideProps(overrides, "lastname")}
+        onBlur={() => runValidationTasks("username", username)}
+        errorMessage={errors.username?.errorMessage}
+        hasError={errors.username?.hasError}
+        {...getOverrideProps(overrides, "username")}
       ></TextField>
       <TextField
         label="Email"
@@ -234,8 +234,8 @@ export default function RestaurantOwnerUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstname,
-              lastname,
+              fullname,
+              username,
               email: value,
               phone,
               address,
@@ -265,8 +265,8 @@ export default function RestaurantOwnerUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstname,
-              lastname,
+              fullname,
+              username,
               email,
               phone: value,
               address,
@@ -296,8 +296,8 @@ export default function RestaurantOwnerUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstname,
-              lastname,
+              fullname,
+              username,
               email,
               phone,
               address: value,
@@ -328,8 +328,8 @@ export default function RestaurantOwnerUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstname,
-              lastname,
+              fullname,
+              username,
               email,
               phone,
               address,
@@ -359,8 +359,8 @@ export default function RestaurantOwnerUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstname,
-              lastname,
+              fullname,
+              username,
               email,
               phone,
               address,
@@ -382,18 +382,18 @@ export default function RestaurantOwnerUpdateForm(props) {
         {...getOverrideProps(overrides, "planstatus")}
       >
         <option
+          children="Free"
+          value="FREE"
+          {...getOverrideProps(overrides, "planstatusoption0")}
+        ></option>
+        <option
           children="Basic"
           value="BASIC"
-          {...getOverrideProps(overrides, "planstatusoption0")}
+          {...getOverrideProps(overrides, "planstatusoption1")}
         ></option>
         <option
           children="Premium"
           value="PREMIUM"
-          {...getOverrideProps(overrides, "planstatusoption1")}
-        ></option>
-        <option
-          children="Super"
-          value="SUPER"
           {...getOverrideProps(overrides, "planstatusoption2")}
         ></option>
       </SelectField>
@@ -406,8 +406,8 @@ export default function RestaurantOwnerUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstname,
-              lastname,
+              fullname,
+              username,
               email,
               phone,
               address,

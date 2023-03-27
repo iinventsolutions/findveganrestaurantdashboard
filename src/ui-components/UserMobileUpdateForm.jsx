@@ -29,12 +29,14 @@ export default function UserMobileUpdateForm(props) {
     lat: "",
     lng: "",
     sub: "",
+    phone: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [address, setAddress] = React.useState(initialValues.address);
   const [lat, setLat] = React.useState(initialValues.lat);
   const [lng, setLng] = React.useState(initialValues.lng);
   const [sub, setSub] = React.useState(initialValues.sub);
+  const [phone, setPhone] = React.useState(initialValues.phone);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = userMobileRecord
@@ -45,6 +47,7 @@ export default function UserMobileUpdateForm(props) {
     setLat(cleanValues.lat);
     setLng(cleanValues.lng);
     setSub(cleanValues.sub);
+    setPhone(cleanValues.phone);
     setErrors({});
   };
   const [userMobileRecord, setUserMobileRecord] = React.useState(userMobile);
@@ -60,10 +63,11 @@ export default function UserMobileUpdateForm(props) {
   React.useEffect(resetStateValues, [userMobileRecord]);
   const validations = {
     name: [{ type: "Required" }],
-    address: [{ type: "Required" }],
-    lat: [{ type: "Required" }],
-    lng: [{ type: "Required" }],
-    sub: [{ type: "Required" }],
+    address: [],
+    lat: [],
+    lng: [],
+    sub: [],
+    phone: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -95,6 +99,7 @@ export default function UserMobileUpdateForm(props) {
           lat,
           lng,
           sub,
+          phone,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -155,6 +160,7 @@ export default function UserMobileUpdateForm(props) {
               lat,
               lng,
               sub,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -171,7 +177,7 @@ export default function UserMobileUpdateForm(props) {
       ></TextField>
       <TextField
         label="Address"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={address}
         onChange={(e) => {
@@ -183,6 +189,7 @@ export default function UserMobileUpdateForm(props) {
               lat,
               lng,
               sub,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -199,7 +206,7 @@ export default function UserMobileUpdateForm(props) {
       ></TextField>
       <TextField
         label="Lat"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         type="number"
         step="any"
@@ -215,6 +222,7 @@ export default function UserMobileUpdateForm(props) {
               lat: value,
               lng,
               sub,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.lat ?? value;
@@ -231,7 +239,7 @@ export default function UserMobileUpdateForm(props) {
       ></TextField>
       <TextField
         label="Lng"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         type="number"
         step="any"
@@ -247,6 +255,7 @@ export default function UserMobileUpdateForm(props) {
               lat,
               lng: value,
               sub,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.lng ?? value;
@@ -263,7 +272,7 @@ export default function UserMobileUpdateForm(props) {
       ></TextField>
       <TextField
         label="Sub"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={sub}
         onChange={(e) => {
@@ -275,6 +284,7 @@ export default function UserMobileUpdateForm(props) {
               lat,
               lng,
               sub: value,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.sub ?? value;
@@ -288,6 +298,35 @@ export default function UserMobileUpdateForm(props) {
         errorMessage={errors.sub?.errorMessage}
         hasError={errors.sub?.hasError}
         {...getOverrideProps(overrides, "sub")}
+      ></TextField>
+      <TextField
+        label="Phone"
+        isRequired={false}
+        isReadOnly={false}
+        value={phone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              address,
+              lat,
+              lng,
+              sub,
+              phone: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone ?? value;
+          }
+          if (errors.phone?.hasError) {
+            runValidationTasks("phone", value);
+          }
+          setPhone(value);
+        }}
+        onBlur={() => runValidationTasks("phone", phone)}
+        errorMessage={errors.phone?.errorMessage}
+        hasError={errors.phone?.hasError}
+        {...getOverrideProps(overrides, "phone")}
       ></TextField>
       <Flex
         justifyContent="space-between"

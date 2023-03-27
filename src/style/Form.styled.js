@@ -8,12 +8,13 @@ export const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 25px;
+  gap: 20px;
+  /* gap: ${(props) => (props.gap ? props.gap : '25px')}; */
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
   /* box-shadow: rgba(0, 0, 0, 0.2) 0px 60px 40px -7px; */
   /* box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px; */
   /* box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px; */
-  padding: 40px 0px;
+  padding: 20px 0px;
 
   /* LAPTOP */
   @media only screen and (max-width: 1115px) {
@@ -26,7 +27,7 @@ export const Form = styled.form`
     font-family: 'Inter', sans-serif;
     color: #000;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     /* margin-top: 20px; */
 
   }

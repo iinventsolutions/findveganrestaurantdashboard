@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { DataStore } from 'aws-amplify' 
+import { DataStore, Storage } from 'aws-amplify' 
 import { Restaurant, Dish } from '../models/index';
 import {Grid, Paper} from '@mui/material';
 import Box from '@mui/material/Box';
@@ -13,6 +13,7 @@ const Settings = () => {
 
   const [restaurant, setRestaurant] = useState([])
   const [tryDishes, setTryDishes] = useState()
+  const [imageLink, setImageLink] = useState()
 
   const navigate = useNavigate();
 
@@ -34,14 +35,34 @@ const Settings = () => {
   //   setTryDishes(allRestaurants.data.listDishes.items)
   //  }
 
+  const getImage = async() => {  
+    const file = await Storage.get("Law.jpg", {
+      level: "public"
+    });
+    console.log("the image: ",file)
+    setImageLink(file)
+   }
   
 
 
   useEffect(() => {
       fetchRestaurants()
-      // allRes()
-      // console.log("Home Stack state: ", index);
+      // getImage()
   }, [])
+
+  async function onChange(e) {
+    const file = e.target.files[0];
+    try {
+      await Storage.put(file.name, file, {
+        contentType: "image/png", // contentType is optional
+      });
+    } catch (error) {
+      console.log("Error uploading file: ", error);
+    }
+  }
+
+  
+
 
 
   return (
@@ -80,6 +101,9 @@ const Settings = () => {
     <NewResButton onClick={()=>navigate('/add-menu', { replace: true })}>
       <p>Add Menu</p>
     </NewResButton>
+    <input type='file' onChange={onChange}/>
+    <img src={`${imageLink}`} height={250} width={350}/>
+    <div onClick={getImage}>Get image</div>
     </div>
   )
 }

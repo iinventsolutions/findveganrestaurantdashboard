@@ -19,6 +19,7 @@ export declare type UserMobileUpdateFormInputValues = {
     lat?: number;
     lng?: number;
     sub?: string;
+    phone?: string;
 };
 export declare type UserMobileUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -26,6 +27,7 @@ export declare type UserMobileUpdateFormValidationValues = {
     lat?: ValidationFunction<number>;
     lng?: ValidationFunction<number>;
     sub?: ValidationFunction<string>;
+    phone?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UserMobileUpdateFormOverridesProps = {
@@ -35,6 +37,7 @@ export declare type UserMobileUpdateFormOverridesProps = {
     lat?: PrimitiveOverrideProps<TextFieldProps>;
     lng?: PrimitiveOverrideProps<TextFieldProps>;
     sub?: PrimitiveOverrideProps<TextFieldProps>;
+    phone?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type UserMobileUpdateFormProps = React.PropsWithChildren<{
     overrides?: UserMobileUpdateFormOverridesProps | undefined | null;

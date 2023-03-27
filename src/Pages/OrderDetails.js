@@ -105,22 +105,21 @@ const OrderDetails = () => {
   // }, [orderDetails?.id])
 
   async function getOrderDishes() {
-    const orderDishes = await DataStore.query(OrderDish, od => od.orderID.eq(orderDetails?.id), {
+    const allOrderDishes = await DataStore.query(OrderDish, od => od.orderID.eq(orderDetails?.id), {
       include: {
         dish: true // include the "Dish" model in the result set
       }
     });
-    console.log(orderDishes);
+    // console.log(allOrderDishes);
   
     // Iterate over each OrderDish object and wait for its "dish" property to resolve
-    const orderDishesWithDish = await Promise.all(orderDishes.map(async (od) => {
+    const orderDishesWithDish = await Promise.all(allOrderDishes?.map(async (od) => {
       const dish = await od.Dish;
       return { ...od, dish };
     }));
     
-    setOrderDishes(orderDishesWithDish)
+    setOrderDishes(orderDishesWithDish);
     console.log("Order Dishes Kings Grill: ",orderDishesWithDish);
-
   }
 
   useEffect(() => {
@@ -181,8 +180,8 @@ const OrderDetails = () => {
                   </Box>
                 </UserDetails>
               </Paper>
-              <Paper sx={{height: '10vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Box sx={{display: 'flex', justifyContent: 'space-between', width: '55%', alignItems: 'center'}}>
+              <Paper sx={{paddingTop: '20px', paddingBottom: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Box sx={{display: 'flex', justifyContent: 'space-between', width: '70%', alignItems: 'center', gap: '10px'}}>
                     <LocationOnOutlinedIcon />
                     <Typography>{customerDetails?.address}</Typography>
                 </Box>

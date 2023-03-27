@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { RestaurantOwner, Order } from "../models";
+import { RestaurantOwner, Order, Restaurant } from "../models";
 import { Auth } from "aws-amplify";
 import { DataStore, Predicates } from "aws-amplify";
 
@@ -16,7 +16,7 @@ export const RestaurantOwnerContextProvider = ({children}) => {
     // console.log("The sub: ", sub)
 
     const deleteAModel = async() => { 
-        await DataStore.delete(Order, Predicates.ALL);
+        await DataStore.delete(Restaurant, Predicates.ALL);
      }
 
     useEffect(() => {
@@ -49,11 +49,11 @@ export const RestaurantOwnerContextProvider = ({children}) => {
             setCheckOwnerExistence(null);
           } else if (existingRecord.length > 0) {
             setCheckOwnerExistence(false);
-            console.log("in the if block ",existingRecord.length)
+            console.log("in the if block ",existingRecord?.length)
           } else {
             console.log('existingRec', existingRecord)
             // setTimeout(() => {
-              console.log("in the else block ",existingRecord.length)
+              console.log("in the else block ",existingRecord?.length)
                 setCheckOwnerExistence(true);
             //   }, 1000);
           }

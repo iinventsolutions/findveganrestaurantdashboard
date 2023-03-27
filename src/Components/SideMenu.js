@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import AppsIcon from '@mui/icons-material/Apps';
 import DescriptionIcon from '@mui/icons-material/Description';
 import RateReviewIcon from '@mui/icons-material/RateReview';
@@ -11,11 +11,13 @@ import { useNavigate } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Space } from 'antd';
 import { useRestaurantContex } from '../Contexts/RestaurantContext';
+import { Auth } from 'aws-amplify';
 
 
 
-const SideMenu = ({signOut}) => {
+const SideMenu = () => {
 
+  const navigate = useNavigate();
   const { restaurant } = useRestaurantContex();
 
   const [modal, contextHolder] = Modal.useModal();
@@ -27,13 +29,26 @@ const SideMenu = ({signOut}) => {
       okText: 'Yes',
       cancelText: 'Cancel',
       onOk: function(e){
-        signOut()
+        localStorage.clear()
+        Auth.signOut()
+        navigate('/')
       }
     });
   };
 
 
-  const navigate = useNavigate();
+
+
+
+
+  // useEffect(() => {
+  //   if(!restaurant){
+  //       navigate('/add-restaurant')
+  //     }
+  // }, [restaurant])
+  
+
+
 
 
 
@@ -52,7 +67,7 @@ const SideMenu = ({signOut}) => {
     {
         key: 'order-list',
         icon: <RateReviewIcon style={{fontSize: 20}}/>,
-        label: 'Order List'
+        label: 'Orders'
     },
     {
         key: 'reviews',

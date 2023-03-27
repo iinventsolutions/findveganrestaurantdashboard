@@ -7,7 +7,7 @@ const NoInternet = () => {
     return(
         <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
             <CloudOffIcon style={{fontSize: 100, color: 'red'}}/>
-            <h4 style={{fontSize: '20px'}}>No internet! Try again later</h4>
+            <h4 style={{fontSize: '20px'}}>Network error! Try again later</h4>
         </div>
     )
  }

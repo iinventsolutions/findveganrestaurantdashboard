@@ -4,18 +4,21 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import '@aws-amplify/ui-react/styles.css'
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import { RestaurantContexProvider } from './Contexts/RestaurantContext';
 import { RestaurantOwnerContextProvider } from './Contexts/RestaurantOwnerContext';
 import { OrderContextProvider } from './Contexts/OrderContex';
+import { AuthContextProvider } from './Contexts/AuthContext';
 
 
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <AmplifyProvider>
+  // <AmplifyProvider>
+  //<Router>
+  <AuthContextProvider>
     <RestaurantContexProvider>
       <RestaurantOwnerContextProvider>
         <OrderContextProvider>
@@ -23,7 +26,9 @@ root.render(
         </OrderContextProvider>
       </RestaurantOwnerContextProvider>
     </RestaurantContexProvider>
-  </AmplifyProvider>
+  </AuthContextProvider>
+  //</Router>
+  // </AmplifyProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

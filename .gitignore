@@ -33,7 +33,7 @@ amplify/backend/.temp
 build/
 dist/
 node_modules/
-# aws-exports.js
+aws-exports.js
 awsconfiguration.json
 amplifyconfiguration.json
 amplifyconfiguration.dart
@@ -44,4 +44,5 @@ amplifytools.xcconfig
 **.sample
 #amplify-do-not-edit-end
 
-# src/Utils/Constants.js
+src/Utils/Constants.js
+.env

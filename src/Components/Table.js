@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRestaurantContex } from '../Contexts/RestaurantContext';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
+import { useOrderContext } from '../Contexts/OrderContex';
 // import format from 'date-fns/format';
 
 
@@ -16,32 +17,48 @@ const TableAnt = () => {
  
 
   const { restaurant } = useRestaurantContex();
+  const { setClickedOrderId } = useOrderContext();
+
 
   const [orders, setOrders] = useState({})
 
   const navigate = useNavigate();
   const [customerNames, setCustomerNames] = useState({})
+  const [refreshState, setRefreshState] = useState(false)
 
-  useEffect(() => {
+  const getOrderList = async() => { 
     if(!restaurant?.id){
       return;
     }
     console.log("restaurant id is: ",restaurant?.id)
-    DataStore.query(Order, (o)=> o.orderRestaurantId.eq(restaurant?.id)).then(setOrders)
+    await DataStore.query(Order, (o)=> o.orderRestaurantId.eq(restaurant?.id)).then(setOrders)
+   }
 
+  useEffect(() => {
+    getOrderList()
   }, [restaurant?.id])
 
-  // useEffect(() => {
-  //   const subscription = DataStore.observe(Order).subscribe((msg) => {
-  //     console.log(msg)
-  //   })
-
-  //   return () => subscription.unsubscribe();
-  // }, [])
+  useEffect(() => {
+    try {
+      const subscription = DataStore.observe(Order).subscribe(msg => {
+        console.log(msg)
+        // console.log('Model:', msg.model.name, 'Operation:', msg.opType, 'Element:', msg.element);
+        if(msg.opType === 'INSERT' && msg.element.orderRestaurantId == restaurant?.id){
+          setOrders((existingOrders)=> [msg.element, ...existingOrders])
+        }
+        else if(msg.opType === 'UPDATE'){
+          getOrderList();
+        }
+      });
+      return () => subscription.unsubscribe();
+    } catch (error) {
+      console.error('Error observing orders:', error);
+    }
+  }, [])
   
 
 
- console.log("Order data: ", orders)
+//  console.log("Order data: ", orders)
 
 
   const orderStatus = (status) => { 
@@ -102,8 +119,9 @@ const TableAnt = () => {
         }));
       });
     }
-    console.log('all customer names: ', customerNames)
+    // console.log('all customer names: ', customerNames)
     return <p>{customerNames[customerId]?.toUpperCase()}</p>;
+    // return customerNames[customerId]?.toUpperCase()
   };
 
   const changeOrderStatus = async(id, thestate) => { 
@@ -115,62 +133,11 @@ const TableAnt = () => {
       })
     ); 
 
-    navigate(-1)
+    // navigate(-1)
+    setRefreshState(!refreshState)
    }
 
-// const columns = [
-//   {
-//     title: 'OrderID',
-//     dataIndex: 'id',
-//     key: 'id',
-//     className: 'custom-header-cell',
-//     render: (text) => <a>{text}</a>,
-//   },
-//   {
-//     title: 'Date and Time',
-//     dataIndex: 'createdAt',
-//     key: 'createdAt',
-//     render: convertDate
-//   },
-//   {
-//     title: 'Customer Name',
-//     dataIndex: 'usermobileID',
-//     key: 'usermobileID',
-//     render: getCustomerName
-//   },
-//   {
-//     title: 'Amount',
-//     dataIndex: 'subtotal',
-//     key: 'subtotal',
-//     render: (amount) => <p>GHS {amount}</p>
-//   },
-//   {
-//     title: 'Status',
-//     key: 'status',
-//     dataIndex: 'status',
-//     render: orderStatus,
-//   },
-//   {
-//     title: 'Payment',
-//     dataIndex: 'payment',
-//     key: 'payment',
-//   },
-//   // {
-//   //   title: 'Time',
-//   //   dataIndex: 'time',
-//   //   key: convertTime,
-//   // },
-//   {
-//     title: 'Action',
-//     key: 'action',
-//     render: (_, record) => (
-//       <Space size="middle">
-//         <a>Accept {record.customename}</a>
-//         <a>Decline</a>
-//       </Space>
-//     ),
-//   },
-// ];
+
 
 // For mui
 
@@ -187,8 +154,7 @@ const columns = [
     headerName: 'Date and Time',
     type: 'dateTime',
     renderCell: (params) => convertDate(params.value),
-    // valueFormatter: (params) => format(new Date(params.value), 'yyyy-MM-dd hh:mm a'),
-    sortable: false,
+    sortable: true,
     flex: 2,
   },
   {
@@ -249,6 +215,7 @@ const columns = [
 
 console.log("the rows object is: ", orders)
 
+  // let inversedOrders = orders.reverse()
 
   return(
     // <Table 
@@ -270,8 +237,8 @@ console.log("the rows object is: ", orders)
             disableSelectionOnClick
             components={{ Toolbar: GridToolbar }}
             // getRowId={getRowId}
-            onCellDoubleClick={()=>{}}
-            onRowClick={(row) => {navigate(row.id)}}
+            onCellDoubleClick={(row) => {navigate(row.id)}}
+            onRowClick={(row) => {setClickedOrderId(row.id)}}
             experimentalFeatures={{ newEditingApi: true }}
           />
         </Box>

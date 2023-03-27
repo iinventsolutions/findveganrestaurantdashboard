@@ -177,6 +177,20 @@ code {
   .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiDataGrid-iconSeparator.css-i4bv87-MuiSvgIcon-root{
     display: none !important;
   }
+
+  table th {
+    /* border: 1px solid #b3adad; */
+    padding:5px;
+    background: #B3B3B3;
+    color: #fff;
+
+  }
+
+  table td {
+    padding: 5px;
+    padding-left: 20px;
+    color: #fff;
+  }
   
   
   

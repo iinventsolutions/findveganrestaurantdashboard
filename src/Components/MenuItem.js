@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import { DataStore } from 'aws-amplify';
@@ -14,6 +14,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Storage } from 'aws-amplify';
 
 
 
@@ -22,6 +23,10 @@ const MenuItem = ({data}) => {
     const navigate = useNavigate();
 
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [imageLink, setImageLink] = useState(null)
+
+    const DEFAULT_IMAGE_LINK = 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2018/10/4/1/FN_chain-restaurant-entrees_Applebees_Bourbon-Street-Chicken-Shrimp_s6x4.jpg.rend.hgtvcom.616.411.suffix/1538685780055.jpeg'
+
     const toggleModal = () => {
       setIsModalVisible((prevState) => !prevState);
     };
@@ -30,8 +35,23 @@ const MenuItem = ({data}) => {
       const item = await DataStore.query(Dish, id);
       DataStore.delete(item);
       setIsModalVisible(false);
-      window.location.reload()
+      // window.location.reload()
     };
+
+    const getImage = async() => {  
+      const file = await Storage.get(data?.image, {
+        level: "public"
+      });
+      // console.log("the image: ",file)
+      setImageLink(file)
+    }
+
+    useEffect(() => {
+      if(data?.image){
+        getImage()
+      }
+    }, [])
+    
 
   return (
     <>
@@ -58,10 +78,11 @@ const MenuItem = ({data}) => {
         </RowFour>
     </ComponentWrapper> */}
 
-    <Card sx={{ width: 345 }}>
+    <Card sx={{ width: 280 }}>
       <CardMedia
         sx={{ height: 140 }}
-        image="https://ca-times.brightspotcdn.com/dims4/default/e711f87/2147483647/strip/true/crop/3506x2342+0+0/resize/1200x802!/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Fba%2F37%2F333364b34c628523f061f93f753c%2F947100-fo-ponchos-tlayudas-review-06.jpg"
+        // image={`${imageLink ? imageLink : DEFAULT_IMAGE_LINK}`}
+        image = {imageLink ? imageLink : DEFAULT_IMAGE_LINK}
         title={data?.name}
       />
       <CardContent>

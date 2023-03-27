@@ -5,11 +5,14 @@ import { DataStore } from 'aws-amplify'
 import { Dish } from '../models'
 import { useRestaurantContex } from '../Contexts/RestaurantContext'
 import MenuItemTwo from '../Components/MenuItemTwo'
+import { NewResButton } from './Dashboard'
+import { useNavigate } from 'react-router-dom'
 
 
 const Menu = () => {
 
   const { restaurant } = useRestaurantContex();
+  const navigate = useNavigate();
 
   const [dishes, setDishes] = useState()
 
@@ -21,10 +24,14 @@ const Menu = () => {
   
 
   return (
+    <>
+      <div style={{display: 'flex', justifyContent: 'flex-end', width: '100%'}}>
+        <NewResButton onClick={()=>navigate('/add-menu', { replace: true })}><p color='#fff'>+ Add Dish</p></NewResButton>
+      </div>
     <ComponentWrapper>
       {dishes?.map(dishItem => <MenuItem key={dishItem?.id} data={dishItem}/>)}
-      {/* <MenuItemTwo /> */}
     </ComponentWrapper>
+    </>
   )
 }
 
@@ -38,8 +45,9 @@ const ComponentWrapper = styled.div`
   width: 100%;
   /* border: 1px solid black; */
   padding: 15px 15px;
-  gap: 3rem;
-  justify-content: space-between;
+  gap: 1.5rem;
+  /* justify-content: space-between; */
+  align-items: flex-start;
   overflow: auto;
   scrollbar-width: none;
 

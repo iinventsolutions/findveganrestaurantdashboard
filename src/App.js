@@ -6,7 +6,7 @@ import Sidebar from "./Components/Sidebar";
 
 import { Amplify } from 'aws-amplify';
 import awsconfig from './aws-exports';
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import Layout from './Components/Layout';
 import LoginSignup from './Pages/LoginSignup';
 import OnboardingPage from './Components/Onboard';
@@ -17,74 +17,50 @@ import SideMenu from './Components/SideMenu';
 import MenuOpenSharpIcon from '@mui/icons-material/MenuOpenSharp';
 import { useRestaurantOwnerContext } from './Contexts/RestaurantOwnerContext';
 import CheckInternet from './Components/CheckInternet';
+import Dashboard from './Pages/Dashboard';
+import Onboard from './Components/Onboard';
+import { useOrderContext } from './Contexts/OrderContex';
+import LandingPage from './Pages/LandingPage';
+import LoginPage from './Pages/LoginPage';
+import ConfrimEmail from './Pages/ConfrimEmail';
+import { useAuthContex } from './Contexts/AuthContext';
+import ForgotPassword from './Pages/ForgotPassword';
+import NewPassword from './Pages/NewPassword';
+// import { useNavigate } from 'react-router-dom';
 
 const { Sider, Content, Footer, Header} = Layout;
 
 Amplify.configure(awsconfig);
 
-function App({signOut, user}) {
+function App() {
+
+  // const navigate = useNavigate();
 
 
   const { restaurantOwner, checkOwnerExistence } = useRestaurantOwnerContext();
+  // const { restaurant } = useRestaurantContex();
   
-  const [showOnboarding, setShowOnboarding] = useState(checkOwnerExistence);
 
-  useEffect(() => {
-    const storedShowOnboarding = localStorage.getItem('showOnboarding');
-    if (storedShowOnboarding === null) {
-      setShowOnboarding(true);
-    } else {
-      setShowOnboarding(JSON.parse(storedShowOnboarding));
-    }
-  }, []);
 
-  const handleOnboardingDismiss = () => {
-    setShowOnboarding(false);
-    localStorage.setItem('showOnboarding', JSON.stringify(false));
-  };
+  console.log("The Restaurant Owner ", restaurantOwner)
 
 
 
-    console.log("The Restaurant Owner ", restaurantOwner)
-
-    console.log("ONBOARDING STATE: ", checkOwnerExistence)
+  const {user} = useAuthContex()
 
 
-
-  return (
-    <div>
-      {/* {showOnboarding === null ? null : showOnboarding ? 
-      (
-        <OnboardingScreen onDismiss={handleOnboardingDismiss} />
-        ) : (
-          <MainPage signOut={signOut} user={user} />
-      )} */}
-      {checkOwnerExistence === null ? <CheckInternet /> : checkOwnerExistence ? 
-      (
-        <OnboardingScreen onDismiss={handleOnboardingDismiss} />
-        ) : (
-          <MainPage signOut={signOut} user={user} />
-      )}
-  </div>
-  );
-}
-
-function OnboardingScreen({ onDismiss }) {
-  return (
-      <OnboardingPage onDismiss={onDismiss} />
-  );
-}
-
-function MainPage({ signOut, user }) {
+  const check = true
 
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-      <Layout>
-        <Router>
+    <Router>
+      <div>
+      {user === undefined ? <CheckInternet /> : user? <Layout height='100vh'>
+        
         <Sider trigger={null} collapsible collapsed={collapsed} width={250} style={{backgroundColor: '#F8A94C', width: '500px'}}>
           <Image width={collapsed? 65 : 150} style={{marginLeft: 10, marginTop: 10}} src='/images/logo.png'/>
-          <SideMenu signOut={signOut}/>
+          <SideMenu signOut/>
 
           {collapsed === false && <div style={{marginTop: '70px', marginLeft: '20px', marginBottom: 20, width: '100%'}}>
             <img className='sidebarImage' height={200} width={170} src='/images/upgrade.png' />
@@ -108,31 +84,25 @@ function MainPage({ signOut, user }) {
           </Footer>
           
         </Layout>
-        
-      
-            {/* <MainPageWrapper> */}
+          
+      </Layout> :
 
-            {/* <SidebarWrapper>
-              <Sidebar signOut={signOut}/>
-            </SidebarWrapper> */}
-
-            {/* <MainContent> */}
-              {/* <Navbar /> */}
-              {/* <Layout> */}
-                
-              {/* </Layout> */}
-            {/* </MainContent> */}
-
-          {/* </MainPageWrapper> */}
-          </Router>
-      </Layout>
+      // Before loging routes
+      <Routes>
+        <Route exact path="/" element={ <LandingPage /> } />
+        <Route exact path="/login" element={ <LoginPage /> } />
+        <Route exact path="/signup" element={ <Onboard /> } />
+        <Route exact path="/confirm-email" element={ <ConfrimEmail /> } />
+        <Route exact path="/forgot-password" element={ <ForgotPassword /> } />
+        <Route exact path="/new-password" element={ <NewPassword /> } />
+      </Routes>
+      }
+      </div>
+    </Router>
   )
+
 }
-
-
-export default withAuthenticator(App,{
-  socialProviders: ['google']
-});
+export default App
 
 const MainPageWrapper = styled.div`
   display: flex;
@@ -161,3 +131,22 @@ const SidebarWrapper = styled.div`
   /* border: 1px solid green; */
   background-color: #F8A94C;
 `
+
+
+
+
+
+            {/* <MainPageWrapper> */}
+
+            {/* <SidebarWrapper>
+              <Sidebar signOut={signOut}/>
+            </SidebarWrapper> */}
+
+            {/* <MainContent> */}
+              {/* <Navbar /> */}
+              {/* <Layout> */}
+                
+              {/* </Layout> */}
+            {/* </MainContent> */}
+
+          {/* </MainPageWrapper> */}

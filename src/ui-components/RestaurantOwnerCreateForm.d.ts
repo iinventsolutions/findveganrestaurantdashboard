@@ -13,8 +13,8 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type RestaurantOwnerCreateFormInputValues = {
-    firstname?: string;
-    lastname?: string;
+    fullname?: string;
+    username?: string;
     email?: string;
     phone?: string;
     address?: string;
@@ -23,8 +23,8 @@ export declare type RestaurantOwnerCreateFormInputValues = {
     sub?: string;
 };
 export declare type RestaurantOwnerCreateFormValidationValues = {
-    firstname?: ValidationFunction<string>;
-    lastname?: ValidationFunction<string>;
+    fullname?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
     email?: ValidationFunction<string>;
     phone?: ValidationFunction<string>;
     address?: ValidationFunction<string>;
@@ -35,8 +35,8 @@ export declare type RestaurantOwnerCreateFormValidationValues = {
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type RestaurantOwnerCreateFormOverridesProps = {
     RestaurantOwnerCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    firstname?: PrimitiveOverrideProps<TextFieldProps>;
-    lastname?: PrimitiveOverrideProps<TextFieldProps>;
+    fullname?: PrimitiveOverrideProps<TextFieldProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
     email?: PrimitiveOverrideProps<TextFieldProps>;
     phone?: PrimitiveOverrideProps<TextFieldProps>;
     address?: PrimitiveOverrideProps<TextFieldProps>;

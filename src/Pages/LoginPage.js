@@ -1,82 +1,61 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import { Form, Wrapper, Terms } from '../style/Form.styled';
-import ClaimButton from './ClaimButton';
-import InputField from './InputField';
-import { inputData } from '../data';
-import PaymentPlan from './PaymentPlan';
-import { useOrderContext } from '../Contexts/OrderContex';
-import { Link } from 'react-router-dom';
-import CustomInput from './CustomInput';
-import { useForm } from "react-hook-form";
-import { Auth, DataStore } from 'aws-amplify';
-import { RestaurantOwner } from '../models';
+import React, {useState} from 'react'
+import styled from 'styled-components'
+import { Form, Wrapper, Terms } from '../style/Form.styled'
+import ClaimButton from '../Components/ClaimButton'
+import InputField from '../Components/InputField'
+import { inputDataLogin } from '../data'
+import PaymentPlan from '../Components/PaymentPlan'
+import { useOrderContext } from '../Contexts/OrderContex'
+import {Link} from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
-import { useAuthContex } from '../Contexts/AuthContext';
+import { Auth } from 'aws-amplify';
+import CustomInput from '../Components/CustomInput'
+import { useForm } from "react-hook-form";
 
-const Onboard = () => {
+const LoginPage = () => {
 
   const navigate = useNavigate();
-  const { setVerificationEmail } = useAuthContex();
 
-  const { control, handleSubmit, watch } = useForm();
+  const { control, handleSubmit } = useForm();
+  // const onSubmit = data => {
+  //   console.log(data);
+  // }
+
+  const [showPlansection, setShowPlansection] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
 
-  const onSubmit = async(data) => {
-    // console.log(data);
-    if(loading){
-      return
-    }
 
-    setLoading(true)
-    // navigation.navigate('ConfirmEmail', {userEmail: data.email});
-    const {fullname, username, email, password, phone, address, dob} = data
-    try {
-      const {userSub} = await Auth.signUp({
-        username: email,
-        password,
-        attributes: {
-          email,
-          phone_number: phone,
-          name: fullname,
-          preferred_username: username
-        },
-        autoSignIn: { // optional - enables auto sign in after user is confirmed
-          enabled: true,
-        }
-      })
-      
-      if(userSub){
-        await DataStore.save(new RestaurantOwner({
-          fullname,
-          username,
-          email,
-          phone,
-          address,
-          dob,
-          sub: userSub
-        }))
-      } else{
-        setErrorMsg(new Error("User id not ready! Retry!"));
-      }
-      // setDbUser(user)
-      navigate(`/confirm-email`, {replace: true})
-      setVerificationEmail(email)
-    } catch (error) {
-      // alert(error.message)
-      setErrorMsg(error.message)
-    }
+const onSubmit = async(data) => {
+  // e.preventDefault()
 
-    setLoading(false)
+  if(loading){
+    return
   }
+
+  setLoading(true)
+  try {
+    const res = await Auth.signIn(data.email, data.password)
+    console.log(res)
+    navigate(`/`, {replace: true})
+  } catch (error) {
+    // alert("Oops", error.message)
+    setErrorMsg(error.message)
+  }
+  setLoading(false)
+    // alert('free trial claimed')
+}
 
 
 
   return (
     <PageWrapper>
+      {/* <Plan> */}
+          {/* {showPlansection && <PaymentPlan onDismiss={onDismiss} setShowPlansection={setShowPlansection} registrationInfo={formData}/>} */}
+      {/* </Plan> */}
     <ComponentWrapper>
         <SidePage>
+          {/* <p onClick={()=>{setcheckLogin(!checkLogin); navigate(`/`, {replace: true})}}>Login</p> */}
           <Logo>
               <img src="/images/signlogo.png" alt="logo" />
           </Logo>
@@ -89,52 +68,45 @@ const Onboard = () => {
           <TitleWrapper style={{ width: '400px' }}>
             <img src='/images/reviews.png' height='40px'width='250px' alt='reviews' />
           </TitleWrapper>
-
+          
+            {/* <div onClick={onDismiss}>
+            Got it!
+          </div> */}
         </SidePage>
         <ImageWrapper>
             <img src="/images/signuparrow.png"  alt="onboard" />
         </ImageWrapper>
         <MainPage>
-        <Form gap={20} onSubmit={handleSubmit(onSubmit)}>
-          <p>Create an account</p>
-          {inputData.map(item => {
-              // Define the validation rules object
-              const rules = {
-                required: `${item.errMsg}`,
-                minLength: {
-                  value: item?.length,
-                  message: item?.lengthErrMsg
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <p>Login to an account</p>
+            {/* {inputDataLogin.map(input => {
+                return <InputField key={input.id} {...input} value={formData[input.name]} onChange={changeHandler}/>            
+            })} */}
+            {inputDataLogin.map(item => <CustomInput
+              key={item.id}
+              id={item.id}         
+              name={item.name}
+              placeholder={item.placeholder}
+              type={item.type}
+              control={control}
+              defaultValue=""
+              rules={{ required: `${item.errMsg}`, 
+               minLength: {
+                value: item?.length,
+                message: item?.lengthErrMsg
                 },
                 pattern: {
                   value: item.pattern,
                   message: item.errMsg
                 }
-              };
-
-              // If the item has a 'validate' property that is true, add the 'validate' rule
-              if (item?.validate === true) {
-                rules.validate = value => value === watch('password') || 'Password does not match';
-              }
-
-              return (
-                <CustomInput
-                  inputHeight={30}
-                  key={item.id}
-                  id={item.id}         
-                  name={item.name}
-                  placeholder={item.placeholder}
-                  type={item.type}
-                  control={control}
-                  defaultValue=""
-                  rules={rules}
-                />
-              );
-            })}
+              }}/>)}
             <Wrapper>
-            {errorMsg && <p style={{color: 'red', fontStyle: 'italic', fontSize: 14, marginBottom: 8}}>{errorMsg}</p>}
-                <ClaimButton title={loading? 'Registering...':'Sign up'}/>
+                
+                {errorMsg && <p style={{color: 'red', fontStyle: 'italic', fontSize: 14, marginBottom: 8}}>{errorMsg}</p>}
+                <ClaimButton title={loading?'Loading...':'Login'}/>
+                <Link to='/forgot-password' style={{color: '#BAB7D4', fontSize: '14px', cursor: 'pointer', marginTop: '10px', textDecoration: 'none'}}>Forgot Password?</Link>
                 <Terms>By clicking the button, you are agreeing to our <span>Terms and Services</span></Terms>
-                <Link to="/login" style={{color: '#BAB7D4', fontSize: '14px', cursor: 'pointer'}}>Already have an account? Login</Link>
+                <Link to="/signup" style={{color: '#BAB7D4', fontSize: '14px', cursor: 'pointer'}}>Don't have an account? Create one</Link>
             </Wrapper>
         </Form>
         </MainPage>
@@ -143,7 +115,7 @@ const Onboard = () => {
   )
 }
 
-export default Onboard
+export default LoginPage
 
 const ComponentWrapper = styled.div`
     display: flex;
@@ -151,7 +123,6 @@ const ComponentWrapper = styled.div`
     height: 100vh;
     width: 100vw;
     background-color: #ffffff;
-    /* overflow: scroll; */
 
 
     @media only screen and (max-width: 600px) {

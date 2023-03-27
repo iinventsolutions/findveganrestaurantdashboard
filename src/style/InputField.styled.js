@@ -14,7 +14,7 @@ export const Error = styled.span`
     color: #FF7979;
     font-size: 13px;
     font-style: italic;
-    display: none;
+    /* display: none; */
 `
 
 

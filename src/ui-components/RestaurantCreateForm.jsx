@@ -26,14 +26,14 @@ export default function RestaurantCreateForm(props) {
     name: "",
     image: "",
     deliveryFee: "",
-    minDelivery: "",
     maxDelivery: "",
-    address: "",
+    minDelivery: "",
     lat: "",
     lng: "",
     sub: "",
     openingTime: "",
     closingTime: "",
+    address: "",
     phone: "",
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -41,13 +41,12 @@ export default function RestaurantCreateForm(props) {
   const [deliveryFee, setDeliveryFee] = React.useState(
     initialValues.deliveryFee
   );
-  const [minDelivery, setMinDelivery] = React.useState(
-    initialValues.minDelivery
-  );
   const [maxDelivery, setMaxDelivery] = React.useState(
     initialValues.maxDelivery
   );
-  const [address, setAddress] = React.useState(initialValues.address);
+  const [minDelivery, setMinDelivery] = React.useState(
+    initialValues.minDelivery
+  );
   const [lat, setLat] = React.useState(initialValues.lat);
   const [lng, setLng] = React.useState(initialValues.lng);
   const [sub, setSub] = React.useState(initialValues.sub);
@@ -57,20 +56,21 @@ export default function RestaurantCreateForm(props) {
   const [closingTime, setClosingTime] = React.useState(
     initialValues.closingTime
   );
+  const [address, setAddress] = React.useState(initialValues.address);
   const [phone, setPhone] = React.useState(initialValues.phone);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setImage(initialValues.image);
     setDeliveryFee(initialValues.deliveryFee);
-    setMinDelivery(initialValues.minDelivery);
     setMaxDelivery(initialValues.maxDelivery);
-    setAddress(initialValues.address);
+    setMinDelivery(initialValues.minDelivery);
     setLat(initialValues.lat);
     setLng(initialValues.lng);
     setSub(initialValues.sub);
     setOpeningTime(initialValues.openingTime);
     setClosingTime(initialValues.closingTime);
+    setAddress(initialValues.address);
     setPhone(initialValues.phone);
     setErrors({});
   };
@@ -78,14 +78,14 @@ export default function RestaurantCreateForm(props) {
     name: [{ type: "Required" }],
     image: [],
     deliveryFee: [],
-    minDelivery: [],
     maxDelivery: [],
-    address: [],
+    minDelivery: [],
     lat: [{ type: "Required" }],
     lng: [{ type: "Required" }],
     sub: [],
     openingTime: [],
     closingTime: [],
+    address: [],
     phone: [],
   };
   const runValidationTasks = async (
@@ -116,14 +116,14 @@ export default function RestaurantCreateForm(props) {
           name,
           image,
           deliveryFee,
-          minDelivery,
           maxDelivery,
-          address,
+          minDelivery,
           lat,
           lng,
           sub,
           openingTime,
           closingTime,
+          address,
           phone,
         };
         const validationResponses = await Promise.all(
@@ -182,14 +182,14 @@ export default function RestaurantCreateForm(props) {
               name: value,
               image,
               deliveryFee,
-              minDelivery,
               maxDelivery,
-              address,
+              minDelivery,
               lat,
               lng,
               sub,
               openingTime,
               closingTime,
+              address,
               phone,
             };
             const result = onChange(modelFields);
@@ -217,14 +217,14 @@ export default function RestaurantCreateForm(props) {
               name,
               image: value,
               deliveryFee,
-              minDelivery,
               maxDelivery,
-              address,
+              minDelivery,
               lat,
               lng,
               sub,
               openingTime,
               closingTime,
+              address,
               phone,
             };
             const result = onChange(modelFields);
@@ -256,14 +256,14 @@ export default function RestaurantCreateForm(props) {
               name,
               image,
               deliveryFee: value,
-              minDelivery,
               maxDelivery,
-              address,
+              minDelivery,
               lat,
               lng,
               sub,
               openingTime,
               closingTime,
+              address,
               phone,
             };
             const result = onChange(modelFields);
@@ -278,45 +278,6 @@ export default function RestaurantCreateForm(props) {
         errorMessage={errors.deliveryFee?.errorMessage}
         hasError={errors.deliveryFee?.hasError}
         {...getOverrideProps(overrides, "deliveryFee")}
-      ></TextField>
-      <TextField
-        label="Min delivery"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={minDelivery}
-        onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              name,
-              image,
-              deliveryFee,
-              minDelivery: value,
-              maxDelivery,
-              address,
-              lat,
-              lng,
-              sub,
-              openingTime,
-              closingTime,
-              phone,
-            };
-            const result = onChange(modelFields);
-            value = result?.minDelivery ?? value;
-          }
-          if (errors.minDelivery?.hasError) {
-            runValidationTasks("minDelivery", value);
-          }
-          setMinDelivery(value);
-        }}
-        onBlur={() => runValidationTasks("minDelivery", minDelivery)}
-        errorMessage={errors.minDelivery?.errorMessage}
-        hasError={errors.minDelivery?.hasError}
-        {...getOverrideProps(overrides, "minDelivery")}
       ></TextField>
       <TextField
         label="Max delivery"
@@ -334,14 +295,14 @@ export default function RestaurantCreateForm(props) {
               name,
               image,
               deliveryFee,
-              minDelivery,
               maxDelivery: value,
-              address,
+              minDelivery,
               lat,
               lng,
               sub,
               openingTime,
               closingTime,
+              address,
               phone,
             };
             const result = onChange(modelFields);
@@ -358,39 +319,43 @@ export default function RestaurantCreateForm(props) {
         {...getOverrideProps(overrides, "maxDelivery")}
       ></TextField>
       <TextField
-        label="Address"
+        label="Min delivery"
         isRequired={false}
         isReadOnly={false}
-        value={address}
+        type="number"
+        step="any"
+        value={minDelivery}
         onChange={(e) => {
-          let { value } = e.target;
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
               name,
               image,
               deliveryFee,
-              minDelivery,
               maxDelivery,
-              address: value,
+              minDelivery: value,
               lat,
               lng,
               sub,
               openingTime,
               closingTime,
+              address,
               phone,
             };
             const result = onChange(modelFields);
-            value = result?.address ?? value;
+            value = result?.minDelivery ?? value;
           }
-          if (errors.address?.hasError) {
-            runValidationTasks("address", value);
+          if (errors.minDelivery?.hasError) {
+            runValidationTasks("minDelivery", value);
           }
-          setAddress(value);
+          setMinDelivery(value);
         }}
-        onBlur={() => runValidationTasks("address", address)}
-        errorMessage={errors.address?.errorMessage}
-        hasError={errors.address?.hasError}
-        {...getOverrideProps(overrides, "address")}
+        onBlur={() => runValidationTasks("minDelivery", minDelivery)}
+        errorMessage={errors.minDelivery?.errorMessage}
+        hasError={errors.minDelivery?.hasError}
+        {...getOverrideProps(overrides, "minDelivery")}
       ></TextField>
       <TextField
         label="Lat"
@@ -408,14 +373,14 @@ export default function RestaurantCreateForm(props) {
               name,
               image,
               deliveryFee,
-              minDelivery,
               maxDelivery,
-              address,
+              minDelivery,
               lat: value,
               lng,
               sub,
               openingTime,
               closingTime,
+              address,
               phone,
             };
             const result = onChange(modelFields);
@@ -447,14 +412,14 @@ export default function RestaurantCreateForm(props) {
               name,
               image,
               deliveryFee,
-              minDelivery,
               maxDelivery,
-              address,
+              minDelivery,
               lat,
               lng: value,
               sub,
               openingTime,
               closingTime,
+              address,
               phone,
             };
             const result = onChange(modelFields);
@@ -482,14 +447,14 @@ export default function RestaurantCreateForm(props) {
               name,
               image,
               deliveryFee,
-              minDelivery,
               maxDelivery,
-              address,
+              minDelivery,
               lat,
               lng,
               sub: value,
               openingTime,
               closingTime,
+              address,
               phone,
             };
             const result = onChange(modelFields);
@@ -517,14 +482,14 @@ export default function RestaurantCreateForm(props) {
               name,
               image,
               deliveryFee,
-              minDelivery,
               maxDelivery,
-              address,
+              minDelivery,
               lat,
               lng,
               sub,
               openingTime: value,
               closingTime,
+              address,
               phone,
             };
             const result = onChange(modelFields);
@@ -552,14 +517,14 @@ export default function RestaurantCreateForm(props) {
               name,
               image,
               deliveryFee,
-              minDelivery,
               maxDelivery,
-              address,
+              minDelivery,
               lat,
               lng,
               sub,
               openingTime,
               closingTime: value,
+              address,
               phone,
             };
             const result = onChange(modelFields);
@@ -576,6 +541,41 @@ export default function RestaurantCreateForm(props) {
         {...getOverrideProps(overrides, "closingTime")}
       ></TextField>
       <TextField
+        label="Address"
+        isRequired={false}
+        isReadOnly={false}
+        value={address}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              image,
+              deliveryFee,
+              maxDelivery,
+              minDelivery,
+              lat,
+              lng,
+              sub,
+              openingTime,
+              closingTime,
+              address: value,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.address ?? value;
+          }
+          if (errors.address?.hasError) {
+            runValidationTasks("address", value);
+          }
+          setAddress(value);
+        }}
+        onBlur={() => runValidationTasks("address", address)}
+        errorMessage={errors.address?.errorMessage}
+        hasError={errors.address?.hasError}
+        {...getOverrideProps(overrides, "address")}
+      ></TextField>
+      <TextField
         label="Phone"
         isRequired={false}
         isReadOnly={false}
@@ -587,14 +587,14 @@ export default function RestaurantCreateForm(props) {
               name,
               image,
               deliveryFee,
-              minDelivery,
               maxDelivery,
-              address,
+              minDelivery,
               lat,
               lng,
               sub,
               openingTime,
               closingTime,
+              address,
               phone: value,
             };
             const result = onChange(modelFields);

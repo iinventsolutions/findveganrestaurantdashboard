@@ -3,7 +3,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { Button, message, Form, Input, Space, Upload, Alert } from 'antd';
 import Grid from '@mui/material/Grid';
 import { InboxOutlined, UploadOutlined } from '@ant-design/icons';
-import { DataStore } from 'aws-amplify';
+import { DataStore, Storage } from 'aws-amplify';
 import { Dish } from '../models';
 import { useRestaurantContex } from '../Contexts/RestaurantContext';
 
@@ -18,6 +18,7 @@ const NewMenuItemForm = () => {
     const [description, setDescription] = useState(null)
     const [price, setPrice] = useState(null)
     const [image, setImage] = useState(null)
+    const [s3image, setS3image] = useState(null)
     const [errorStatus, setErrorStatus] = useState(false)
     const [errorMsg, setErrorMsg] = useState(null)
 
@@ -27,46 +28,53 @@ const NewMenuItemForm = () => {
         messageApi
         .open({
             type: 'loading',
-            content: `Adding ${restaurantName} to Database..`,
+            content: `Adding ${restaurantName} to Database...`,
             duration: 2.5,
         })
         .then(() => message.success('Loading finished', 2.5))
-        .then(() => message.info('Restaurant added', 2.5));
+        .then(() => message.info('Dish added', 2.5));
     };
 
-    const handleChange = (info) => {
+    const handleChange = async(info) => {
         let newFileList = [...info.fileList];
         newFileList = newFileList.slice(-1);
         setImage(newFileList);
 
         console.log(image)
+
+        // const file = info.target.files[0];
+        // setS3image(file.name)
+        console.log("My image ",image)
+        try {
+          await Storage.put(image.name, image, {
+            contentType: "image/png", // contentType is optional
+          });
+        } catch (error) {
+          console.log("Error uploading file: ", error);
+        }
     };
 
     const handleSubmit = async (e) => { 
-
-        // try {
-        //     const values = await form.validateFields();
-        //     console.log('Success:', values);
-        //   } catch (errorInfo) {
-        //     console.log('Failed:', errorInfo);
-        //   }
-
         e.preventDefault()
-        // console.log("Dish name: ", dishName);
-        // console.log("Description: ", description);
-        // console.log("Price: ", price);
-        // console.log("RestaurantID: ", restaurant?.id);
 
         try {
+
+            await Storage.put(image.name, image, {
+                contentType: "image/png", // contentType is optional
+            });
+
             await DataStore.save(
                 new Dish({
                   name: dishName,
                   description: description,
                   price: parseFloat(price),
-                  restaurantID: restaurant?.id
+                  restaurantID: restaurant?.id,
+                  image: image.name
               })).then((res)=>console.log(res.data))
               setErrorStatus(false)
               success(dishName);
+
+
         } catch (error) {
             if(error){
                 console.log(error)
@@ -75,7 +83,14 @@ const NewMenuItemForm = () => {
             }
         }
 
+        setDishName(null)
+        setDescription(null)
+        setPrice(null)
+
      }
+
+
+     
 
 
   return (
@@ -127,14 +142,14 @@ const NewMenuItemForm = () => {
 
             <Form.Item label="Upload dish image" required>
                 {/* <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle> */}
-                    <Upload.Dragger name="files" action="/upload.do" fileList={image} onChange={handleChange}>
+                    {/* <Upload.Dragger name="files" fileList={image} onChange={handleChange}>
                     <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                     </p>
                     <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                    {/* <p className="ant-upload-hint">Support for a single or bulk upload.</p> */}
-                    </Upload.Dragger>
+                    </Upload.Dragger> */}
                 {/* </Form.Item> */}
+                <input type='file' onChange={(e)=>setImage(e.target.files[0])}/>
             </Form.Item>
 
             <Form.Item>
