@@ -33,7 +33,7 @@ const Onboard = () => {
     // navigation.navigate('ConfirmEmail', {userEmail: data.email});
     const {fullname, username, email, password, phone, address, dob} = data
     try {
-      const {userSub} = await Auth.signUp({
+      const registeringUser = await Auth.signUp({
         username: email,
         password,
         attributes: {
@@ -46,7 +46,11 @@ const Onboard = () => {
           enabled: true,
         }
       })
-      
+
+      // await Auth.updateUserAttributes(registeringUser, {
+      //   'custom:groups': 'RestaurantOwners'
+      // });
+      const {userSub} = registeringUser
       if(userSub){
         await DataStore.save(new RestaurantOwner({
           fullname,

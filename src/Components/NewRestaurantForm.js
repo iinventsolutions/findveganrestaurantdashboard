@@ -4,7 +4,7 @@ import { Button, message, Form, Input, Space, Upload, Alert } from 'antd';
 import Grid from '@mui/material/Grid';
 import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
 import { InboxOutlined, UploadOutlined } from '@ant-design/icons';
-import { DataStore } from 'aws-amplify';
+import { DataStore, Storage } from 'aws-amplify';
 import { Restaurant } from '../models';
 import { useRestaurantContex } from '../Contexts/RestaurantContext';
 // import { GOOGLE_API_KEY } from '../Utils/Constants';
@@ -32,6 +32,7 @@ const NewRestaurantForm = () => {
     const [fileList, setFileList] = useState([]);
     const [errorStatus, setErrorStatus] = useState(false)
     const [errorMsg, setErrorMsg] = useState(null)
+    const [image, setImage] = useState(null)
 
     
     const [messageApi, contextHolder] = message.useMessage();
@@ -41,10 +42,10 @@ const NewRestaurantForm = () => {
         .open({
             type: 'loading',
             content: `Adding ${restaurantName} to Database..`,
-            duration: 2.5,
+            duration: 2,
         })
-        .then(() => message.success('Loading finished', 2.5))
-        .then(() => message.info('Restaurant added', 2.5));
+        .then(() => message.success('Loading finished', 2))
+        .then(() => message.info('Restaurant added', 2));
     };
 
     const handleSubmit = async (e) => { 
@@ -57,6 +58,11 @@ const NewRestaurantForm = () => {
         // console.log("Closing time: ", closingTime);
         // console.log("File list: ", fileList);
         try {
+            await Storage.put(`RestaurantImages/${image.name}`, image, {
+                contentType: "image/jpg", // contentType is optional
+            });
+
+
             await DataStore.save(
                 new Restaurant({
                   name: restaurantName,
@@ -67,7 +73,7 @@ const NewRestaurantForm = () => {
                   sub: sub,
                   phone: phoneNumber,
                   address: location.label,
-                  image: 'https://www.medoc-atlantique.com/wp-content/uploads/2019/02/restaurant-1600x900.jpg'
+                  image: image.name
               }))
               setErrorStatus(false)
               
@@ -166,14 +172,14 @@ const NewRestaurantForm = () => {
 
             <Form.Item label="Upload restaurant image" required>
                 {/* <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle> */}
-                    <Upload.Dragger name="files" action="/upload.do" fileList={fileList} onChange={handleChange}>
+                    {/* <Upload.Dragger name="files" action="/upload.do" fileList={fileList} onChange={handleChange}>
                     <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                     </p>
                     <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                    {/* <p className="ant-upload-hint">Support for a single or bulk upload.</p> */}
-                    </Upload.Dragger>
+                    </Upload.Dragger> */}
                 {/* </Form.Item> */}
+                <input type='file' onChange={(e)=>setImage(e.target.files[0])}/>
             </Form.Item>
 
             <Form.Item>

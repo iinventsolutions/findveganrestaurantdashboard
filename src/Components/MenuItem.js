@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
-import { DataStore } from 'aws-amplify';
+import { DataStore, Storage } from 'aws-amplify';
 import { Dish } from '../models';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
@@ -14,7 +14,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Storage } from 'aws-amplify';
 
 
 
@@ -34,12 +33,14 @@ const MenuItem = ({data}) => {
     const deleteDishItem = async (id) => {
       const item = await DataStore.query(Dish, id);
       DataStore.delete(item);
+
+      await Storage.remove(item?.image);
       setIsModalVisible(false);
       // window.location.reload()
     };
 
     const getImage = async() => {  
-      const file = await Storage.get(data?.image, {
+      const file = await Storage.get(`DishImages/${data?.image}`, {
         level: "public"
       });
       // console.log("the image: ",file)
@@ -86,9 +87,13 @@ const MenuItem = ({data}) => {
         title={data?.name}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-            {data?.name}
-        </Typography>
+        <RowOne>
+          <Typography gutterBottom variant="h5" component="div">
+              {data?.name}
+          </Typography>
+          <p>GHS{data?.price}</p>
+        </RowOne>
+
         <RowTwo>
             <p>5-10min</p>
             <div><p>In Stock</p></div>
@@ -99,7 +104,7 @@ const MenuItem = ({data}) => {
       </CardContent>
       <CardActions>
       <RowFour>
-            <div style={{cursor: 'pointer'}} onClick={toggleModal}><p>Revome</p></div>
+            <div style={{cursor: 'pointer'}} onClick={toggleModal}><p>Remove</p></div>
             <div style={{backgroundColor: '#000000', cursor: 'pointer'}} onClick={()=>navigate(`/edit-menu/${data?.id}`, {replace: true})}><p>Edit</p></div>
         </RowFour>
       </CardActions>

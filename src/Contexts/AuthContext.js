@@ -35,6 +35,11 @@ export const AuthContextProvider = ({children}) => {
       }, [])
 
       useEffect(() => {
+        console.log("TRACKING USER", user)
+      }, [user])
+      
+
+      useEffect(() => {
         const listener = (data) =>{ 
           if(data.payload.event === 'signIn' || data.payload.event === 'signOut'){
             checkUser();
